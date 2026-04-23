@@ -1,0 +1,272 @@
+{% extends "base.html" %}
+{% block title %}SQL Console{% endblock %}
+
+{% block extra_css %}
+<style>
+  .sql-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px 16px 36px;
+  }
+
+  .sql-card {
+    background: #fff;
+    border: 1px solid #d9dee7;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .sql-head {
+    padding: 16px 18px;
+    border-bottom: 1px solid #e8ecf1;
+    background: #fafafa;
+  }
+
+  .sql-head h2 {
+    margin: 0;
+    font-size: 22px;
+    color: #253041;
+  }
+
+  .sql-body {
+    padding: 18px;
+  }
+
+  .info-box {
+    margin-bottom: 14px;
+    background: #fff8f2;
+    border: 1px solid #f5d2bc;
+    color: #8a4b20;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .query-box {
+    width: 100%;
+    min-height: 180px;
+    border: 1px solid #d7dce3;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 14px;
+    font-family: Consolas, monospace;
+    resize: vertical;
+    outline: none;
+  }
+
+  .query-box:focus {
+    border-color: #f47c33;
+    box-shadow: 0 0 0 3px rgba(244, 124, 51, 0.12);
+  }
+
+  .action-row {
+    margin-top: 14px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn-main,
+  .btn-light {
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1px solid #d8dde6;
+    cursor: pointer;
+  }
+
+  .btn-main {
+    background: #f47c33;
+    color: #fff;
+    border-color: #f47c33;
+  }
+
+  .btn-main:disabled {
+    background: #f3a271;
+    cursor: not-allowed;
+  }
+
+  .btn-light {
+    background: #fff;
+    color: #374151;
+  }
+
+  .result-box {
+    margin-top: 20px;
+  }
+
+  .result-message {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+    color: #374151;
+    font-size: 14px;
+  }
+
+  .error-box {
+    background: #fdecec;
+    border: 1px solid #f5c2c7;
+    color: #b42318;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 16px;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    margin-bottom: 18px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+    background: #fff;
+  }
+
+  th, td {
+    padding: 10px 12px;
+    border: 1px solid #eceff3;
+    text-align: left;
+    font-size: 14px;
+    vertical-align: top;
+  }
+
+  th {
+    background: #fafbfc;
+    color: #475467;
+    font-weight: 700;
+  }
+
+  td {
+    color: #374151;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="sql-page">
+  <div class="sql-card">
+    <div class="sql-head">
+      <h2>Admin SQL Console</h2>
+    </div>
+
+    <div class="sql-body">
+      <div class="info-box">
+        Only <strong>read-only single queries</strong> are allowed here.<br>
+        Allowed examples: <code>SELECT * FROM users</code>, <code>SELECT * FROM clinics</code>, <code>PRAGMA table_info(users)</code><br>
+        Multiple queries and update/delete/drop statements are blocked.
+      </div>
+
+      <textarea id="queryBox" class="query-box" placeholder="Write one read-only query here...
+Example:
+SELECT * FROM users"></textarea>
+
+      <div class="action-row">
+        <button class="btn-main" id="runBtn" onclick="runQuery()">Run Query</button>
+        <button class="btn-light" onclick="clearOutput()">Clear Output</button>
+      </div>
+
+      <div id="output" class="result-box"></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function runQuery() {
+  const query = document.getElementById("queryBox").value.trim();
+  const output = document.getElementById("output");
+  const runBtn = document.getElementById("runBtn");
+
+  if (!query) {
+    output.innerHTML = '<div class="error-box">Please enter a query.</div>';
+    return;
+  }
+
+  runBtn.disabled = true;
+  runBtn.textContent = "Running...";
+
+  fetch("{{ url_for('admin.run_query') }}", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ query: query })
+  })
+  .then(res => res.json())
+  .then(data => {
+    output.innerHTML = "";
+
+    if (data.error) {
+      output.innerHTML = `<div class="error-box">${escapeHtml(data.error)}</div>`;
+      return;
+    }
+
+    if (!data.results || data.results.length === 0) {
+      output.innerHTML = `<div class="result-message">No results returned.</div>`;
+      return;
+    }
+
+    data.results.forEach(result => {
+      if (result.type === "message") {
+        output.innerHTML += `<div class="result-message">${escapeHtml(result.message)}</div>`;
+      }
+
+      if (result.type === "select") {
+        let html = `<div class="table-wrap"><table><thead><tr>`;
+
+        result.columns.forEach(col => {
+          html += `<th>${escapeHtml(col)}</th>`;
+        });
+
+        html += `</tr></thead><tbody>`;
+
+        if (result.rows.length === 0) {
+          html += `<tr><td colspan="${result.columns.length}">No rows found.</td></tr>`;
+        } else {
+          result.rows.forEach(row => {
+            html += `<tr>`;
+            result.columns.forEach(col => {
+              const value = row[col] === null ? "" : row[col];
+              html += `<td>${escapeHtml(value)}</td>`;
+            });
+            html += `</tr>`;
+          });
+        }
+
+        html += `</tbody></table></div>`;
+        output.innerHTML += html;
+      }
+    });
+  })
+  .catch(() => {
+    output.innerHTML = `<div class="error-box">Something went wrong while running the query.</div>`;
+  })
+  .finally(() => {
+    runBtn.disabled = false;
+    runBtn.textContent = "Run Query";
+  });
+}
+
+function clearOutput() {
+  document.getElementById("output").innerHTML = "";
+}
+</script>
+{% endblock %}

@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% block title %}Submitted Successfully{% endblock %}
+
+{% block extra_css %}
+<style>
+  .submit-page {
+    padding: 40px 16px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .submit-card {
+    width: 100%;
+    max-width: 560px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    padding: 32px 24px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 7px 14px;
+    border-radius: 999px;
+    background: #e8f7ed;
+    color: #1f7a3d;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+
+  .status-badge.error {
+    background: #fef2f2;
+    color: #991b1b;
+  }
+
+  .submit-title {
+    margin: 0 0 10px;
+    font-size: 28px;
+    color: #1f2937;
+  }
+
+  .submit-sub {
+    margin: 0 0 22px;
+    font-size: 15px;
+    color: #6b7280;
+    line-height: 1.8;
+  }
+
+  .info-box {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 14px;
+    color: #374151;
+    line-height: 1.7;
+    margin-top: 16px;
+  }
+
+  .action-row {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 22px;
+  }
+
+  .btn-main,
+  .btn-light {
+    display: inline-block;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: 0.2s ease;
+  }
+
+  .btn-main {
+    background: #f47c33;
+    color: #fff;
+    border: 1px solid #f47c33;
+  }
+
+  .btn-main:hover {
+    background: #ea6e22;
+  }
+
+  .btn-light {
+    background: #ffffff;
+    color: #374151;
+    border: 1px solid #d1d5db;
+  }
+
+  .btn-light:hover {
+    background: #f9fafb;
+  }
+
+  .small-note {
+    margin-top: 16px;
+    font-size: 13px;
+    color: #6b7280;
+  }
+
+  @media (max-width: 640px) {
+    .submit-title {
+      font-size: 24px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="submit-page">
+  <div class="submit-card">
+
+    {% if ok and lead %}
+      <span class="status-badge">Submitted Successfully</span>
+
+      <h1 class="submit-title">Thank You</h1>
+
+      <p class="submit-sub">
+        Your referral details have been submitted successfully for
+        <strong>{{ lead.patient_name }}</strong>.
+        Our team will review the information and contact you soon.
+      </p>
+
+      <div class="info-box">
+        {% if lead.hospital_name %}
+          Hospital: <strong>{{ lead.hospital_name }}</strong><br><br>
+        {% endif %}
+        Please keep your phone available. The hospital or consultant team may
+        reach out for the next step.
+      </div>
+
+      <div class="small-note">
+        You may now safely close this page.
+      </div>
+
+      <div class="action-row">
+        <a class="btn-light" href="{{ url_for('home') }}">Go to Home</a>
+      </div>
+
+    {% else %}
+      <span class="status-badge error">Submission Not Found</span>
+
+      <h1 class="submit-title">Something went wrong</h1>
+
+      <p class="submit-sub">
+        We could not find the submitted referral details.
+        Please go back and submit the form again.
+      </p>
+
+      <div class="info-box">
+        If the issue continues, please contact the hospital or consultant team directly.
+      </div>
+
+      <div class="action-row">
+        <a class="btn-main" href="{{ url_for('home') }}">Go to Home</a>
+      </div>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

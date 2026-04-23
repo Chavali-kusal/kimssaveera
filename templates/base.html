@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}HealthQR{% endblock %}</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      overflow-x: hidden;
+      font-family: Arial, sans-serif;
+      background: #eef1f5;
+      color: #1f2937;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .topbar {
+      width: 100%;
+      background: #ffffff;
+      border-bottom: 1px solid #d9dee7;
+      padding: 12px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .topbar-inner {
+      width: 100%;
+      max-width: 1350px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    .logo {
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
+      border-radius: 10px;
+      background: linear-gradient(145deg, #ffffff, #e5e5e5);
+      box-shadow:
+        5px 5px 10px #d1d1d1,
+        -5px -5px 10px #ffffff,
+        inset 1px 1px 0 #ffffff,
+        inset -1px -1px 0 #d9d9d9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #f47c33;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .brand-text {
+      min-width: 0;
+    }
+
+    .brand-text h2 {
+      margin: 0;
+      font-size: 18px;
+      color: #1f2937;
+      line-height: 1.2;
+      word-break: break-word;
+    }
+
+    .brand-text p {
+      margin: 3px 0 0;
+      font-size: 12px;
+      color: #6b7280;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 14px 18px;
+      flex-wrap: wrap;
+      flex: 1 1 auto;
+    }
+
+    .topbar-right a {
+      color: #374151;
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: color 0.2s ease;
+    }
+
+    .topbar-right a:hover {
+      color: #f47c33;
+    }
+
+    .page-content {
+      width: 100%;
+      max-width: 1350px;
+      margin: 0 auto;
+      padding: 0 16px 24px;
+    }
+
+    .flash-stack {
+      width: 100%;
+      max-width: 1100px;
+      margin: 18px auto 0;
+      padding: 0 16px;
+    }
+
+    .flash {
+      position: relative;
+      padding: 12px 42px 12px 14px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      font-size: 14px;
+      border: 1px solid transparent;
+      opacity: 1;
+      transform: translateX(0);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      word-break: break-word;
+    }
+
+    .flash.success {
+      background: #eaf7ee;
+      color: #256d3f;
+      border-color: #bfe3ca;
+    }
+
+    .flash.error,
+    .flash.danger {
+      background: #fdecec;
+      color: #b42318;
+      border-color: #f5c2c7;
+    }
+
+    .flash.warning {
+      background: #fff4df;
+      color: #9a6700;
+      border-color: #f2d59c;
+    }
+
+    .flash.info {
+      background: #eef2ff;
+      color: #3730a3;
+      border-color: #c7d2fe;
+    }
+
+    .flash-close {
+      position: absolute;
+      top: 50%;
+      right: 12px;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: inherit;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    @media (max-width: 1024px) {
+      .topbar {
+        padding: 12px 18px;
+      }
+
+      .page-content {
+        padding: 0 14px 22px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .topbar {
+        padding: 12px 14px;
+      }
+
+      .topbar-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .brand {
+        width: 100%;
+      }
+
+      .topbar-right {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 10px 14px;
+      }
+
+      .page-content,
+      .flash-stack {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      .brand-text h2 {
+        font-size: 16px;
+      }
+
+      .brand-text p {
+        font-size: 11px;
+      }
+
+      .topbar-right a {
+        font-size: 13px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .topbar {
+        padding: 10px 12px;
+      }
+
+      .logo {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        font-size: 16px;
+      }
+
+      .brand {
+        gap: 10px;
+      }
+
+      .brand-text h2 {
+        font-size: 15px;
+      }
+
+      .brand-text p {
+        font-size: 10px;
+      }
+
+      .topbar-right {
+        gap: 8px 12px;
+      }
+
+      .topbar-right a {
+        font-size: 12px;
+      }
+
+      .flash {
+        font-size: 13px;
+        padding: 10px 38px 10px 12px;
+      }
+
+      .page-content,
+      .flash-stack {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+    }
+  </style>
+
+  {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+
+    <div class="brand">
+      <div class="logo">HQ</div>
+      <div class="brand-text">
+        <h2>HealthQR Referral</h2>
+        <p>Consultant → Hospital → Patient</p>
+      </div>
+    </div>
+
+    <div class="topbar-right">
+      {% if session.get('user_id') %}
+
+        <a href="{{ url_for('dashboard.home') }}">Dashboard</a>
+
+        {% if session.get('role') == 'admin' %}
+          <a href="{{ url_for('clinic.create_clinic') }}">Create QR</a>
+          <a href="{{ url_for('admin.doctor_approvals') }}">Doctor Approvals</a>
+          <a href="{{ url_for('admin.sql_console') }}">SQL Console</a>
+        {% endif %}
+
+        {% if session.get('role') == 'doctor' %}
+          <a href="{{ url_for('dashboard.home') }}">My Referrals</a>
+        {% endif %}
+
+        {% if session.get('role') == 'hospital' %}
+          <a href="{{ url_for('dashboard.home') }}">Hospital Panel</a>
+        {% endif %}
+
+        <a href="{{ url_for('auth.logout') }}">Logout</a>
+
+      {% else %}
+
+        <a href="{{ url_for('auth.login') }}">Login</a>
+        <a href="{{ url_for('auth.doctor_signup_page') }}">Signup</a>
+        <a href="{{ url_for('auth.learn_more') }}">Learn More</a>
+
+      {% endif %}
+    </div>
+
+  </div>
+</header>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-stack">
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">
+          {{ message }}
+          <button type="button" class="flash-close" onclick="closeFlash(this)">×</button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<div class="page-content">
+  {% block content %}{% endblock %}
+</div>
+
+{% block extra_js %}{% endblock %}
+
+<script>
+  function closeFlash(button) {
+    const flash = button.closest('.flash');
+    if (!flash) return;
+
+    flash.style.opacity = "0";
+    flash.style.transform = "translateX(30px)";
+
+    setTimeout(() => {
+      flash.remove();
+    }, 400);
+  }
+
+  window.addEventListener("load", function () {
+    const flashes = document.querySelectorAll(".flash");
+
+    flashes.forEach((el, index) => {
+      setTimeout(() => {
+        el.style.opacity = "0";
+        el.style.transform = "translateX(30px)";
+
+        setTimeout(() => {
+          el.remove();
+        }, 400);
+      }, 2000 + (index * 300));
+    });
+  });
+</script>
+
+</body>
+</html>

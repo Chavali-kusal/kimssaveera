@@ -1,0 +1,480 @@
+{% extends "base.html" %}
+{% block title %}Doctor Registration{% endblock %}
+
+{% block extra_css %}
+<style>
+  .signup-page {
+    padding: 24px 16px 36px;
+  }
+
+  .signup-wrap {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+
+  .page-head {
+    text-align: center;
+    margin-bottom: 18px;
+  }
+
+  .page-head h1 {
+    margin: 0;
+    font-size: 34px;
+    color: #1f2937;
+  }
+
+  .page-head p {
+    margin: 8px 0 0;
+    color: #6b7280;
+    font-size: 14px;
+  }
+
+  .signup-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 18px;
+  }
+
+  .panel-card {
+    background: #ffffff;
+    border: 1px solid #d9dee7;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .panel-head {
+    padding: 16px 18px;
+    border-bottom: 1px solid #e8ecf1;
+    background: #fafafa;
+  }
+
+  .panel-head h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #253041;
+  }
+
+  .panel-body {
+    padding: 18px;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 18px;
+  }
+
+  .full-row {
+    grid-column: 1 / -1;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+  }
+
+  .required-star {
+    color: #dc2626;
+    margin-left: 2px;
+    font-weight: 700;
+  }
+
+  .optional-text {
+    color: #6b7280;
+    font-size: 12px;
+    font-weight: 500;
+    margin-left: 4px;
+  }
+
+  .form-input,
+  .form-select,
+  .form-textarea {
+    width: 100%;
+    padding: 12px 13px;
+    border: 1px solid #d7dce3;
+    border-radius: 8px;
+    background: #fff;
+    color: #1f2937;
+    font-size: 14px;
+    outline: none;
+  }
+
+  .form-input:focus,
+  .form-select:focus,
+  .form-textarea:focus {
+    border-color: #f47c33;
+    box-shadow: 0 0 0 3px rgba(244, 124, 51, 0.12);
+  }
+
+  .form-textarea {
+    min-height: 92px;
+    resize: vertical;
+  }
+
+  .field-note {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #6b7280;
+    line-height: 1.5;
+  }
+
+  .note-box {
+    background: #fff8f2;
+    border: 1px solid #f5d2bc;
+    color: #8a4b20;
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .terms-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: #fff;
+    border: 1px solid #d9dee7;
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+
+  .terms-box input[type="checkbox"] {
+    margin-top: 3px;
+    accent-color: #f47c33;
+    width: 16px;
+    height: 16px;
+  }
+
+  .terms-box label {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+    line-height: 1.6;
+  }
+
+  .terms-box a {
+    color: #f47c33;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .action-bar {
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
+  }
+
+  .submit-btn {
+    min-width: 200px;
+    padding: 13px 22px;
+    border: none;
+    border-radius: 8px;
+    background: #f47c33;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .submit-btn:hover {
+    background: #ea6e22;
+  }
+
+  .submit-btn:disabled {
+    background: #f3a271;
+    cursor: not-allowed;
+  }
+
+  .bottom-note {
+    text-align: center;
+    margin-top: 14px;
+    color: #6b7280;
+    font-size: 14px;
+  }
+
+  .bottom-note a {
+    color: #f47c33;
+    font-weight: 600;
+  }
+
+  @media (max-width: 900px) {
+    .signup-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .page-head h1 {
+      font-size: 28px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="signup-page">
+  <div class="signup-wrap">
+
+    <div class="page-head">
+      <h1>Doctor Registration</h1>
+      <p>Please fill the below details. Admin approval is required before login and QR generation.</p>
+    </div>
+
+    <form method="post" action="{{ url_for('auth.doctor_signup_page') }}" enctype="multipart/form-data" id="doctorSignupForm">
+
+      <div class="signup-grid">
+        <section class="panel-card">
+          <div class="panel-head">
+            <h2>Personal Information</h2>
+          </div>
+          <div class="panel-body">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="display_name">Name <span class="required-star">*</span></label>
+                <input class="form-input" id="display_name" name="display_name" type="text" placeholder="Enter full name" required>
+              </div>
+
+              <div class="form-group">
+                <label for="phone">Mobile <span class="required-star">*</span></label>
+                <input class="form-input" id="phone" name="phone" type="text" maxlength="10" pattern="[0-9]{10}" inputmode="numeric" placeholder="Enter mobile number" required>
+                <div class="field-note">This mobile number will also be used as Login ID.</div>
+              </div>
+
+              <div class="form-group">
+                <label for="email">Email ID <span class="required-star">*</span></label>
+                <input class="form-input" id="email" name="email" type="email" placeholder="Enter email address" required>
+              </div>
+
+              <div class="form-group">
+                <label for="organization_name">Organization Name <span class="required-star">*</span></label>
+                <input class="form-input" id="organization_name" name="organization_name" type="text" placeholder="Hospital/Clinic Name" required>
+              </div>
+
+              <div class="form-group">
+                <label for="gender">Gender <span class="required-star">*</span></label>
+                <select class="form-select" id="gender" name="gender" required>
+                  <option value="">Select gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Others">Others</option>
+                </select>
+              </div>
+
+              <div class="form-group full-row">
+                <label for="registered_as">Registered As <span class="required-star">*</span></label>
+                <select class="form-select" id="registered_as" name="registered_as" required>
+                  <option value="">Select type</option>
+                  <option value="RMP">RMP</option>
+                  <option value="Doctor">Doctor</option>
+                  <option value="Ayurvedic">Ayurvedic</option>
+                  <option value="Homeopathy">Homeopathy</option>
+                  <option value="Others">Others</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel-card">
+          <div class="panel-head">
+            <h2>Address Information</h2>
+          </div>
+          <div class="panel-body">
+            <div class="form-grid">
+              <div class="form-group full-row">
+                <label for="address">Address <span class="required-star">*</span></label>
+                <textarea class="form-textarea" id="address" name="address" placeholder="Enter complete address" required></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="city_name">City Name <span class="required-star">*</span></label>
+                <input class="form-input" id="city_name" name="city_name" type="text" placeholder="Enter city name" required>
+              </div>
+
+              <div class="form-group">
+                <label for="pincode">Pincode <span class="required-star">*</span></label>
+                <input class="form-input" id="pincode" name="pincode" type="text" maxlength="6" pattern="[0-9]{6}" inputmode="numeric" placeholder="Enter pincode" required>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="signup-grid">
+        <section class="panel-card">
+          <div class="panel-head">
+            <h2>Documents Proofs</h2>
+          </div>
+          <div class="panel-body">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="pan_number">PAN for TDS <span class="required-star">*</span></label>
+                <input class="form-input" id="pan_number" name="pan_number" type="text" maxlength="10" placeholder="Enter PAN number" required>
+                <div class="field-note">PAN will be auto-converted to uppercase.</div>
+              </div>
+
+              <div class="form-group">
+                <label for="aadhar_number">Aadhar <span class="optional-text">(Optional)</span></label>
+                <input class="form-input" id="aadhar_number" name="aadhar_number" type="text" maxlength="12" inputmode="numeric" placeholder="Enter Aadhar number">
+              </div>
+
+              <div class="form-group">
+                <label for="pan_file">PAN Proof <span class="required-star">*</span></label>
+                <input class="form-input" id="pan_file" name="pan_file" type="file" accept=".png,.jpg,.jpeg,.pdf" required>
+              </div>
+
+              <div class="form-group">
+                <label for="aadhar_file">Aadhar Proof <span class="optional-text">(Optional)</span></label>
+                <input class="form-input" id="aadhar_file" name="aadhar_file" type="file" accept=".png,.jpg,.jpeg,.pdf">
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel-card">
+          <div class="panel-head">
+            <h2>Beneficiary Details</h2>
+          </div>
+          <div class="panel-body">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="account_number">Bank Account Number <span class="required-star">*</span></label>
+                <input class="form-input" id="account_number" name="account_number" type="text" placeholder="Enter bank account number" required>
+              </div>
+
+              <div class="form-group">
+                <label for="ifsc_code">IFSC Code <span class="required-star">*</span></label>
+                <input class="form-input" id="ifsc_code" name="ifsc_code" type="text" maxlength="11" placeholder="Enter IFSC code" required>
+                <div class="field-note">IFSC will be auto-converted to uppercase.</div>
+              </div>
+
+              <div class="form-group full-row">
+                <label for="upi_id">UPI ID <span class="required-star">*</span></label>
+                <input class="form-input" id="upi_id" name="upi_id" type="text" placeholder="Enter UPI ID" required>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <section class="panel-card">
+        <div class="panel-head">
+          <h2>Login Creation</h2>
+        </div>
+        <div class="panel-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="login_id">Login ID <span class="required-star">*</span></label>
+              <input class="form-input" id="login_id" name="login_id" type="text" placeholder="Auto-filled from mobile number" readonly required>
+              <div class="field-note">Login ID will always be same as mobile number.</div>
+            </div>
+
+            <div class="form-group">
+              <label for="password">Choose Password <span class="required-star">*</span></label>
+              <input class="form-input" id="password" name="password" type="password" placeholder="Choose password" minlength="6" required>
+              <div class="field-note">Use a minimum of 6 characters.</div>
+            </div>
+
+            <div class="form-group full-row">
+              <label for="secret_code">Secret Code <span class="required-star">*</span></label>
+              <input class="form-input" id="secret_code" name="secret_code" type="text" placeholder="Enter secret code for alternate login and password reset" required>
+              <div class="field-note">Doctor login supports password or secret code. Secret code is also used in forgot password flow.</div>
+            </div>
+
+            <div class="form-group full-row">
+              <div class="note-box">
+                After registration, this account will remain in <b>Pending Approval</b>.
+                Admin must verify and approve.
+                Only then doctor can login, and only then admin can generate QR.
+              </div>
+            </div>
+
+            <div class="form-group full-row">
+              <div class="terms-box">
+                <input type="checkbox" id="agree_terms" name="agree_terms" value="yes" required>
+                <label for="agree_terms">
+                  I agree to the <a href="#">Terms &amp; Conditions</a> and confirm that the above details are correct.
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="action-bar">
+        <button class="submit-btn" type="submit" id="submitBtn">Register Doctor</button>
+      </div>
+
+      <div class="bottom-note">
+        Already approved? <a href="{{ url_for('auth.login') }}">Sign In</a>
+      </div>
+    </form>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const phoneInput = document.getElementById('phone');
+  const loginInput = document.getElementById('login_id');
+  const panInput = document.getElementById('pan_number');
+  const aadharInput = document.getElementById('aadhar_number');
+  const ifscInput = document.getElementById('ifsc_code');
+  const pincodeInput = document.getElementById('pincode');
+  const submitBtn = document.getElementById('submitBtn');
+  const signupForm = document.getElementById('doctorSignupForm');
+
+  function digitsOnly(el, maxLen) {
+    if (!el) return;
+    el.addEventListener('input', function () {
+      this.value = this.value.replace(/\D/g, '').slice(0, maxLen);
+    });
+  }
+
+  function upperOnly(el, maxLen = null) {
+    if (!el) return;
+    el.addEventListener('input', function () {
+      let value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+      if (maxLen) value = value.slice(0, maxLen);
+      this.value = value;
+    });
+  }
+
+  function syncLoginId() {
+    if (!phoneInput || !loginInput) return;
+    let value = phoneInput.value.replace(/\D/g, '').slice(0, 10);
+    phoneInput.value = value;
+    loginInput.value = value;
+  }
+
+  digitsOnly(phoneInput, 10);
+  digitsOnly(aadharInput, 12);
+  digitsOnly(pincodeInput, 6);
+  upperOnly(panInput, 10);
+  upperOnly(ifscInput, 11);
+
+  if (phoneInput && loginInput) {
+    phoneInput.addEventListener('input', syncLoginId);
+    phoneInput.addEventListener('blur', syncLoginId);
+    syncLoginId();
+  }
+
+  if (signupForm && submitBtn) {
+    signupForm.addEventListener('submit', function () {
+      syncLoginId();
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Registering...';
+    });
+  }
+</script>
+{% endblock %}
