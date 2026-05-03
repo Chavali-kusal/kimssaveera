@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Doctor Home</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#f7faff">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="KIMS Saveera">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="/static/icons/icon-192x192.png">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{margin:0;background:#eaf0f8;color:#0f172a;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+.app{width:100%;max-width:520px;height:100dvh;margin:0 auto;background:#f6f8fb;display:flex;flex-direction:column;overflow:hidden;position:relative}
+.top{flex:0 0 auto;padding:14px 16px 16px;background:radial-gradient(circle at 12% 0,rgba(255,107,53,.50),transparent 34%),linear-gradient(135deg,#0f172a,#263449);color:#fff;border-bottom-left-radius:28px;border-bottom-right-radius:28px;box-shadow:0 14px 34px rgba(15,23,42,.22)}
+.headrow{display:grid;grid-template-columns:46px 1fr 46px;align-items:center;gap:10px}
+.iconbtn{width:44px;height:44px;border-radius:16px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.18);display:grid;place-items:center;color:#fff;text-decoration:none;font-size:19px;box-shadow:inset 0 1px 0 rgba(255,255,255,.14)}
+.doctor{display:flex;align-items:center;justify-content:center;gap:10px;min-width:0}
+.avatar{width:46px;height:46px;border-radius:17px;background:#ff6b35;display:grid;place-items:center;font-weight:950;font-size:22px;box-shadow:0 12px 24px rgba(255,107,53,.28);flex:0 0 auto}
+.title{min-width:0;text-align:left}.title h1{font-size:19px;line-height:1.1;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.title p{margin:4px 0 0;color:#cbd5e1;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}
+.stat{position:relative;overflow:hidden;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);border-radius:18px;padding:11px 8px;min-height:74px;text-align:center}
+.stat:after{content:"";position:absolute;right:-18px;top:-18px;width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.08)}
+.stat span{display:block;color:#d8e0ee;font-size:9.5px;font-weight:850;line-height:1.2}.stat strong{display:block;margin-top:7px;color:#fff;font-size:20px;line-height:1}.stat.pay strong{font-size:17px}
+.content{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:14px 16px 96px;scroll-behavior:smooth}
+.actiongrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}.tile{background:#fff;border:1px solid #e6edf6;border-radius:24px;padding:14px;box-shadow:0 10px 28px rgba(15,23,42,.06);text-decoration:none;color:inherit;display:flex;align-items:center;gap:12px;min-height:84px}.tileico{width:44px;height:44px;border-radius:17px;background:#fff3ed;color:#ff6b35;display:grid;place-items:center;font-size:21px;flex:0 0 auto}.tilename{font-size:14px;font-weight:950}.tiledesc{margin-top:3px;color:#64748b;font-size:11px;line-height:1.35}.arrow{margin-left:auto;color:#94a3b8;font-weight:950}
+.section{display:flex;justify-content:space-between;align-items:center;margin:4px 3px 10px}.section h2{font-size:17px;margin:0}.section a{font-size:12px;color:#ff6b35;text-decoration:none;font-weight:950}
+.card{background:#fff;border:1px solid #e7edf5;border-radius:22px;padding:14px;margin-bottom:10px;box-shadow:0 8px 24px rgba(15,23,42,.055);text-decoration:none;color:inherit;display:block}.card-top{display:grid;grid-template-columns:42px 1fr auto;align-items:center;gap:11px}.pavatar{width:42px;height:42px;border-radius:16px;background:#eef2ff;color:#4338ca;display:grid;place-items:center;font-weight:950}.patient{font-size:15px;font-weight:950;margin:0 0 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.phone{font-size:11.5px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.amount{font-size:16px;font-weight:950;color:#0f172a;text-align:right}.date{font-size:10.5px;color:#94a3b8;text-align:right;margin-top:3px}.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;padding-left:53px}.chip{border-radius:999px;padding:6px 9px;font-size:10.5px;font-weight:950}.green{background:#dcfce7;color:#166534}.amber{background:#fef3c7;color:#92400e}.blue{background:#dbeafe;color:#1e40af}.empty{padding:24px;text-align:center;color:#64748b;background:#fff;border-radius:22px;border:1px dashed #cbd5e1}
+.bottom{position:absolute;left:0;right:0;bottom:0;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.94);backdrop-filter:blur(18px);border-top:1px solid #e5eaf2;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;z-index:20}.nav{display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;color:#64748b;font-size:11px;font-weight:900;border-radius:17px;padding:9px 6px}.nav b{font-size:20px;line-height:1}.nav.active{background:#fff3ed;color:#ff6b35}
+@media(min-width:700px){body{display:grid;place-items:center}.app{height:min(100dvh,820px);border-radius:30px;box-shadow:0 18px 60px rgba(15,23,42,.16);border:1px solid #dfe6ef}.top{border-radius:30px 30px 28px 28px}.bottom{border-radius:24px 24px 30px 30px}}
+@media(max-width:390px){.stats{gap:6px}.stat{padding:10px 5px}.stat strong{font-size:18px}.stat.pay strong{font-size:15px}.title h1{font-size:17px}.actiongrid{gap:10px}.tile{padding:12px;gap:9px}.tileico{width:40px;height:40px}}
+</style>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/app-ui.css', v=20) }}"></head>
+<body><div class="app-splash" aria-hidden="true"><div class="app-splash-card"><div class="app-splash-logo"><img src="{{ url_for('static', filename='icons/Saveera-Hospital_logo-removebg-preview.png') }}" alt="Saveera Hospital"></div><div class="app-splash-title">KIMS Saveera</div><div class="app-splash-sub">Doctor mobile app</div><div class="app-loader"></div></div></div>
+<div class="app">
+<header class="top">
+  <div class="headrow">
+    <a class="iconbtn" href="{{ url_for('mobile.profile') }}" title="Profile">👤</a>
+    <div class="doctor">
+      <div class="avatar">D</div>
+      <div class="title"><h1>{{ session.get('display_name','Doctor') }}</h1><p>HealthQR Doctor App</p></div>
+    </div>
+    <a class="iconbtn" href="{{ url_for('mobile.app_logout') }}" title="Close App">⏻</a>
+  </div>
+  <div class="stats">
+    <div class="stat"><span>Referrals</span><strong>{{ total_referrals }}</strong></div>
+    <div class="stat pay"><span>Payment</span><strong>₹{{ '%.0f'|format(payout_total) }}</strong></div>
+    <div class="stat"><span>Hospitals</span><strong>{{ hospitals }}</strong></div>
+    <div class="stat"><span>Paid</span><strong>{{ paid }}</strong></div>
+  </div>
+</header>
+<main class="content">
+  <div class="actiongrid">
+    <a class="tile" href="{{ url_for('mobile.people') }}"><div class="tileico">👥</div><div><div class="tilename">Patients</div><div class="tiledesc">Referral list</div></div><div class="arrow">›</div></a>
+    <a class="tile" href="{{ url_for('mobile.more') }}"><div class="tileico">📄</div><div><div class="tilename">Reports</div><div class="tiledesc">PDF export</div></div><div class="arrow">›</div></a>
+  </div>
+  <div class="section"><h2>Recent Patients</h2><a href="{{ url_for('mobile.people') }}">View all</a></div>
+  {% for row in referrals %}{% set ref_status=(row['referral_status'] or 'pending')|lower %}{% set pay_status=(row['payout_status'] or 'unpaid')|lower %}
+  <a class="card" href="{{ url_for('mobile.referral_detail', lead_id=row['id']) }}">
+    <div class="card-top">
+      <div class="pavatar">{{ (row['patient_name'] or 'P')[0]|upper }}</div>
+      <div><p class="patient">{{ row['patient_name'] }}</p><div class="phone">{{ row['patient_phone'] }} • {{ row['hospital_name'] }}</div></div>
+      <div><div class="amount">₹{{ row['payout_amount'] if row['payout_amount'] is not none else 0 }}</div><div class="date">{{ row['created_at'] }}</div></div>
+    </div>
+    <div class="chips"><span class="chip {% if ref_status == 'confirmed' %}green{% else %}amber{% endif %}">{{ row['referral_status'] or 'Pending' }}</span><span class="chip {% if pay_status == 'paid' %}green{% else %}blue{% endif %}">{{ row['payout_status'] or 'Unpaid' }}</span></div>
+  </a>
+  {% else %}<div class="empty">No referrals found.</div>{% endfor %}
+</main>
+<nav class="bottom"><a class="nav active" href="{{ url_for('mobile.dashboard') }}"><b>⌂</b><span>Home</span></a><a class="nav" href="{{ url_for('mobile.people') }}"><b>👥</b><span>People</span></a><a class="nav" href="{{ url_for('mobile.more') }}"><b>▦</b><span>More</span></a></nav>
+</div>
+<script>if('serviceWorker'in navigator){navigator.serviceWorker.register('/service-worker.js').catch(()=>{});}</script>
+<script src="{{ url_for('static', filename='js/app-ui.js', v=20) }}"></script></body>
+</html>

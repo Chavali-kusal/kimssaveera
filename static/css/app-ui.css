@@ -1,0 +1,1104 @@
+/* =========================================================
+   HealthQR Mobile-App Presentation Upgrade
+   Scope: UI/animation only. Flask routes, forms, names and backend stay unchanged.
+   ========================================================= */
+:root{
+  --app-bg:#f4f7fb;
+  --app-surface:#ffffff;
+  --app-surface-2:#f8fbff;
+  --app-text:#13233a;
+  --app-muted:#667085;
+  --app-border:#e3e9f2;
+  --app-primary:#1769ff;
+  --app-primary-2:#10b6a6;
+  --app-accent:#ff7a3d;
+  --app-success:#16a34a;
+  --app-danger:#dc2626;
+  --app-warning:#d97706;
+  --app-shadow:0 18px 45px rgba(20,42,84,.10);
+  --app-soft-shadow:0 8px 22px rgba(20,42,84,.07);
+  --app-radius:24px;
+  --app-radius-sm:16px;
+  --app-max:1180px;
+  --bottom-nav-height:76px;
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{
+  min-height:100vh!important;
+  background:
+    radial-gradient(circle at 10% -10%, rgba(23,105,255,.14), transparent 30%),
+    radial-gradient(circle at 90% 0%, rgba(16,182,166,.14), transparent 28%),
+    linear-gradient(180deg,#fbfdff 0%,var(--app-bg) 45%,#eef4fb 100%)!important;
+  color:var(--app-text)!important;
+  font-family:Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif!important;
+  overflow-x:hidden!important;
+}
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background-image:linear-gradient(rgba(19,35,58,.025) 1px, transparent 1px),linear-gradient(90deg,rgba(19,35,58,.025) 1px, transparent 1px);
+  background-size:34px 34px;
+  mask-image:linear-gradient(to bottom, rgba(0,0,0,.55), transparent 68%);
+  z-index:-1;
+}
+
+/* Top shell */
+.topbar{
+  background:rgba(255,255,255,.84)!important;
+  border-bottom:1px solid rgba(227,233,242,.88)!important;
+  backdrop-filter:blur(20px)!important;
+  -webkit-backdrop-filter:blur(20px)!important;
+  box-shadow:0 8px 24px rgba(16,24,40,.04)!important;
+  padding:12px 18px!important;
+}
+.topbar-inner{max-width:var(--app-max)!important;}
+.logo,.brand-mark{
+  background:linear-gradient(135deg,var(--app-primary),var(--app-primary-2))!important;
+  color:#fff!important;
+  border-radius:16px!important;
+  box-shadow:0 12px 26px rgba(23,105,255,.22)!important;
+}
+.brand-text h2,.brand{color:var(--app-text)!important;letter-spacing:-.02em!important;}
+.brand-text p,.sub{color:var(--app-muted)!important;}
+.topbar-right,.nav-links{gap:8px!important;}
+.topbar-right a,.nav-links a{
+  color:#344054!important;
+  border-radius:999px!important;
+  padding:10px 13px!important;
+  transition:transform .18s ease, background .18s ease, color .18s ease!important;
+}
+.topbar-right a:hover,.nav-links a:hover{
+  color:var(--app-primary)!important;
+  background:rgba(23,105,255,.08)!important;
+  transform:translateY(-1px)!important;
+}
+
+.page-content{max-width:var(--app-max)!important;padding:22px 16px calc(28px + var(--bottom-nav-height) + var(--safe-bottom))!important;}
+.page,.page-wrap,.approval-page,.page-single,.referral-page{max-width:var(--app-max)!important;animation:appPageIn .42s cubic-bezier(.2,.8,.2,1) both;}
+@keyframes appPageIn{from{opacity:0;transform:translateY(16px) scale(.992)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+/* Card system */
+.card,.panel-card,.hero-card,.stat-card,.admin-card,.admin-panel,.admin-stat,.qr-card,
+.approval-card,.doctor-card,.section-card,.login-card,.signup-card{
+  background:rgba(255,255,255,.92)!important;
+  border:1px solid rgba(227,233,242,.95)!important;
+  border-radius:var(--app-radius)!important;
+  box-shadow:var(--app-shadow)!important;
+  color:var(--app-text)!important;
+}
+.card,.panel-card,.hero-card,.admin-card,.admin-panel,.qr-card{padding:clamp(18px,3vw,28px)!important;}
+h1,h2,h3{color:var(--app-text)!important;letter-spacing:-.035em!important;line-height:1.12!important;}
+p,.muted,.hero-copy,.sub{color:var(--app-muted)!important;}
+
+/* Premium buttons */
+button,.btn,.btn-main,.btn-light,.admin-btn,.action-btn,input[type="submit"]{
+  min-height:44px;
+  border-radius:16px!important;
+  transition:transform .16s ease, box-shadow .16s ease, background .16s ease, opacity .16s ease!important;
+  touch-action:manipulation;
+}
+button:active,.btn:active,.btn-main:active,.admin-btn:active,.action-btn:active{transform:scale(.975)!important;}
+.btn.primary,.btn-main,.admin-btn.primary,input[type="submit"],button[type="submit"]{
+  background:linear-gradient(135deg,var(--app-primary),#3b82f6)!important;
+  color:#fff!important;
+  border-color:transparent!important;
+  box-shadow:0 12px 24px rgba(23,105,255,.22)!important;
+}
+.btn.ghost,.btn-light,.admin-btn.secondary{
+  background:#fff!important;
+  color:#344054!important;
+  border:1px solid var(--app-border)!important;
+  box-shadow:var(--app-soft-shadow)!important;
+}
+
+/* Inputs */
+label{color:#344054!important;font-weight:800!important;}
+input,select,textarea{
+  background:#fff!important;
+  color:#101828!important;
+  border:1px solid #d7e0ec!important;
+  border-radius:16px!important;
+  min-height:46px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.75)!important;
+  transition:border .16s ease, box-shadow .16s ease, transform .16s ease!important;
+}
+input:focus,select:focus,textarea:focus{
+  border-color:rgba(23,105,255,.55)!important;
+  box-shadow:0 0 0 4px rgba(23,105,255,.10)!important;
+}
+input::placeholder,textarea::placeholder{color:#98a2b3!important;}
+
+/* Tables become app cards with horizontal swipe */
+.table-wrap,.admin-table-wrap{
+  background:#fff!important;
+  border:1px solid var(--app-border)!important;
+  border-radius:22px!important;
+  box-shadow:var(--app-soft-shadow)!important;
+  overflow-x:auto!important;
+  -webkit-overflow-scrolling:touch!important;
+}
+.table-wrap th,.admin-table-wrap th{background:#f8fafc!important;color:#667085!important;}
+.table-wrap td,.admin-table-wrap td{color:#344054!important;}
+
+/* Flash */
+.flash-stack{position:relative;z-index:30;}
+.flash{
+  border-radius:18px!important;
+  box-shadow:var(--app-soft-shadow)!important;
+  animation:toastIn .34s ease both!important;
+}
+@keyframes toastIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+
+/* Bottom mobile navigation added from base.html */
+.app-bottom-nav{
+  position:fixed;
+  left:50%;
+  bottom:0;
+  transform:translateX(-50%);
+  width:min(100%,560px);
+  z-index:999;
+  padding:9px 12px calc(9px + var(--safe-bottom));
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border:1px solid rgba(227,233,242,.96);
+  border-bottom:0;
+  border-top-left-radius:24px;
+  border-top-right-radius:24px;
+  box-shadow:0 -14px 32px rgba(16,24,40,.10);
+  display:none;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+}
+.app-bottom-nav a{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  min-height:54px;
+  color:#667085;
+  border-radius:18px;
+  font-size:11px;
+  font-weight:900;
+  text-decoration:none;
+  transition:.18s ease;
+}
+.app-bottom-nav b{font-size:20px;line-height:1;}
+.app-bottom-nav a.is-active,.app-bottom-nav a:hover{background:#eef5ff;color:var(--app-primary);}
+
+/* Splash screen */
+.app-splash{
+  position:fixed;
+  inset:0;
+  z-index:5000;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(160deg,#f7fbff,#eef7ff 55%,#f6fffc);
+  transition:opacity .36s ease, visibility .36s ease;
+}
+.app-splash.hide{opacity:0;visibility:hidden;}
+.app-splash-card{text-align:center;animation:splashPop .55s ease both;}
+.app-splash-logo{
+  width:72px;height:72px;border-radius:24px;margin:0 auto 14px;
+  display:grid;place-items:center;color:#fff;font-weight:950;font-size:25px;
+  background:linear-gradient(135deg,var(--app-primary),var(--app-primary-2));
+  box-shadow:0 22px 48px rgba(23,105,255,.22);
+}
+.app-splash-title{font-weight:950;color:var(--app-text);font-size:20px;letter-spacing:-.03em;}
+.app-splash-sub{font-size:12px;color:var(--app-muted);margin-top:5px;}
+.app-loader{width:120px;height:5px;background:#dbeafe;border-radius:999px;overflow:hidden;margin:18px auto 0;}
+.app-loader:before{content:"";display:block;width:42%;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--app-primary),var(--app-primary-2));animation:loaderMove .9s infinite ease-in-out;}
+@keyframes loaderMove{0%{transform:translateX(-105%)}100%{transform:translateX(260%)}}
+@keyframes splashPop{from{opacity:0;transform:translateY(12px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+body.is-leaving .page-content{animation:pageOut .2s ease both;}
+@keyframes pageOut{to{opacity:0;transform:translateY(10px) scale(.996)}}
+
+/* Auth pages become premium app landing */
+.auth-shell,.login-shell,.signup-shell{min-height:calc(100vh - 110px);display:grid;place-items:center;}
+.auth-card,.login-card,.signup-card{width:min(100%,460px)!important;}
+
+/* Dashboard responsive grid */
+.stats-grid,.dashboard-cards,.admin-stat-grid{gap:14px!important;}
+.stat-card,.admin-stat{position:relative;overflow:hidden;}
+.stat-card:after,.admin-stat:after{
+  content:"";position:absolute;right:-28px;top:-28px;width:100px;height:100px;border-radius:999px;background:rgba(23,105,255,.08);
+}
+.stat-card strong,.admin-stat strong{color:var(--app-text)!important;}
+
+/* Mobile exact fitting */
+@media (max-width: 768px){
+  body{background:#f5f8fc!important;}
+  .topbar{padding:10px 12px!important;border-bottom-color:transparent!important;}
+  .topbar-inner{flex-direction:row!important;align-items:center!important;}
+  .brand{width:auto!important;flex:1 1 auto!important;}
+  .brand-text h2{font-size:16px!important;}
+  .brand-text p{display:none!important;}
+  .topbar-right{display:none!important;}
+  .page-content{padding:14px 10px calc(24px + var(--bottom-nav-height) + var(--safe-bottom))!important;}
+  .page,.page-wrap,.approval-page,.page-single,.referral-page{padding:10px 0 18px!important;}
+  h1{font-size:clamp(24px,7vw,34px)!important;}
+  h2{font-size:clamp(19px,5.4vw,25px)!important;}
+  p,label,input,select,textarea,button,.btn,a,td,th{font-size:clamp(13px,3.6vw,15px)!important;}
+  .card,.panel-card,.hero-card,.stat-card,.admin-card,.admin-panel,.admin-stat,.qr-card{border-radius:22px!important;padding:16px!important;}
+  .hero-grid,.content-grid,.lead-summary,.form-grid.two-col,.grid,.stats-grid,.dashboard-cards,.dashboard-filters,.admin-stat-grid,.admin-filter-grid{grid-template-columns:1fr!important;}
+  .app-bottom-nav{display:grid;}
+  .action-row,.actions{display:grid!important;grid-template-columns:1fr!important;}
+  .action-row > *,.actions > *,.btn,.btn-main,.btn-light,button[type="submit"]{width:100%!important;}
+  .section-head{align-items:flex-start!important;}
+}
+
+@media (min-width: 769px){
+  .app-bottom-nav{display:none!important;}
+}
+
+@media (max-width: 390px){
+  .page-content{padding-left:8px!important;padding-right:8px!important;}
+  .card,.panel-card,.hero-card,.stat-card,.admin-card,.admin-panel,.admin-stat,.qr-card{padding:14px!important;border-radius:20px!important;}
+  .app-bottom-nav{width:100%;border-radius:22px 22px 0 0;}
+}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important;}
+}
+
+/* =========================================================
+   Mobile app light presentation override (Google Pay / PhonePe style)
+   UI only: no route, form name, Jinja variable, or backend change.
+   ========================================================= */
+@media (max-width: 768px){
+  :root{
+    --gpay-blue:#1a73e8;
+    --gpay-green:#0f9d58;
+    --gpay-yellow:#fbbc04;
+    --gpay-red:#ea4335;
+    --phonepe-purple:#5f2eea;
+    --mobile-bg:#f7faff;
+    --mobile-card:#ffffff;
+    --mobile-border:#e7eef8;
+    --mobile-text:#17233c;
+    --mobile-muted:#667085;
+    --mobile-shadow:0 10px 28px rgba(66,84,120,.08);
+  }
+
+  body{
+    background:
+      radial-gradient(circle at 12% 0%, rgba(26,115,232,.10), transparent 32%),
+      radial-gradient(circle at 92% 4%, rgba(15,157,88,.10), transparent 28%),
+      linear-gradient(180deg,#ffffff 0%,#f7faff 54%,#eef5ff 100%)!important;
+  }
+  body:before{display:none!important;}
+
+  .app,.phone-card{
+    background:var(--mobile-bg)!important;
+    color:var(--mobile-text)!important;
+    box-shadow:none!important;
+  }
+
+  .top,.head,.hero{
+    background:
+      radial-gradient(circle at 14% 8%, rgba(26,115,232,.12), transparent 30%),
+      radial-gradient(circle at 86% 6%, rgba(15,157,88,.12), transparent 28%),
+      linear-gradient(180deg,#ffffff 0%,#f2f7ff 100%)!important;
+    color:var(--mobile-text)!important;
+    border:1px solid rgba(231,238,248,.92)!important;
+    border-top:0!important;
+    box-shadow:0 12px 30px rgba(66,84,120,.07)!important;
+  }
+
+  .top .sub,.head .sub,.hero .sub,.title p,.phone,.field label{
+    color:var(--mobile-muted)!important;
+  }
+
+  .iconbtn,.back,.profile,.icon{
+    background:#ffffff!important;
+    color:var(--gpay-blue)!important;
+    border:1px solid var(--mobile-border)!important;
+    box-shadow:0 8px 18px rgba(66,84,120,.08)!important;
+  }
+
+  .avatar,.logo,.splash-logo,.app-splash-logo{
+    background:linear-gradient(135deg,var(--gpay-blue),var(--gpay-green))!important;
+    color:#fff!important;
+    box-shadow:0 16px 34px rgba(26,115,232,.20)!important;
+  }
+
+  .stats,.filter,.card,.txn,.tile,.stat,.item,.qr-card,.login-card,.signup-card{
+    background:var(--mobile-card)!important;
+    border-color:var(--mobile-border)!important;
+    box-shadow:var(--mobile-shadow)!important;
+  }
+
+  .stat{
+    border-radius:22px!important;
+  }
+  .stats .stat{
+    background:#ffffff!important;
+    min-height:72px!important;
+  }
+  .stats .stat span,.stat span{
+    color:var(--mobile-muted)!important;
+  }
+  .stats .stat strong,.stat strong,.amount,.amt{
+    color:var(--mobile-text)!important;
+  }
+  .stats .stat:nth-child(1):before,.stats .stat:nth-child(2):before,.stats .stat:nth-child(3):before,.stats .stat:nth-child(4):before{
+    display:block;
+    font-size:18px;
+    line-height:1;
+    margin-bottom:6px;
+  }
+  .stats .stat:nth-child(1):before{content:"👥";}
+  .stats .stat:nth-child(2):before{content:"₹";color:var(--gpay-green);font-weight:950;}
+  .stats .stat:nth-child(3):before{content:"🏥";}
+  .stats .stat:nth-child(4):before{content:"✓";color:var(--gpay-blue);font-weight:950;}
+  .stat:after,.stat-card:after,.admin-stat:after{background:rgba(26,115,232,.06)!important;}
+
+  .tile,.txn,.card{
+    border-radius:24px!important;
+    transform:translateZ(0);
+  }
+  .tile:active,.txn:active,.card:active,.nav:active{transform:scale(.985)!important;}
+  .tileico,.ico,.circle,.pavatar{
+    background:linear-gradient(135deg,#eef5ff,#ecfff6)!important;
+    color:var(--gpay-blue)!important;
+    box-shadow:inset 0 0 0 1px rgba(26,115,232,.06)!important;
+  }
+  .tile:nth-child(2) .tileico,.tile:nth-child(2) .ico,
+  .content .tile:nth-of-type(2) .ico{color:var(--phonepe-purple)!important;background:linear-gradient(135deg,#f3efff,#f7fbff)!important;}
+
+  .switch{background:#eef4ff!important;}
+  .switch button.active{
+    color:var(--gpay-blue)!important;
+    background:#ffffff!important;
+  }
+  .btn,.orange,.button,button[type="submit"],.sim-btn{
+    border-radius:18px!important;
+  }
+  .orange,.btn.primary,.btn-main,button[type="submit"],input[type="submit"]{
+    background:linear-gradient(135deg,var(--gpay-blue),#3d8bff)!important;
+    color:#fff!important;
+    box-shadow:0 12px 24px rgba(26,115,232,.20)!important;
+  }
+  .blue,.sim-btn{
+    background:#eef5ff!important;
+    color:var(--gpay-blue)!important;
+  }
+  .light,.btn.ghost,.btn-light{
+    background:#ffffff!important;
+    color:#344054!important;
+    border:1px solid var(--mobile-border)!important;
+  }
+
+  .input,input,select,textarea,.country{
+    background:#ffffff!important;
+    border:1px solid #dce6f3!important;
+    color:var(--mobile-text)!important;
+    box-shadow:none!important;
+  }
+  .input:focus,input:focus,select:focus,textarea:focus{
+    border-color:rgba(26,115,232,.55)!important;
+    box-shadow:0 0 0 4px rgba(26,115,232,.10)!important;
+  }
+
+  .bottom,.app-bottom-nav{
+    background:rgba(255,255,255,.96)!important;
+    border-color:rgba(231,238,248,.98)!important;
+    box-shadow:0 -14px 32px rgba(66,84,120,.10)!important;
+  }
+  .nav{
+    color:#667085!important;
+  }
+  .nav.active,.nav:hover,.app-bottom-nav a.is-active,.app-bottom-nav a:hover{
+    background:#eef5ff!important;
+    color:var(--gpay-blue)!important;
+  }
+
+  .green{background:#e8f5e9!important;color:#137333!important;}
+  .amber{background:#fff8e1!important;color:#b06000!important;}
+  .blue,.blue2{background:#e8f0fe!important;color:#1a73e8!important;}
+
+  .note{
+    background:#f7fbff!important;
+    border:1px solid var(--mobile-border)!important;
+    color:#344054!important;
+  }
+  .timeline{border-left-color:#dbeafe!important;}
+
+  .splash,.app-splash{
+    background:
+      radial-gradient(circle at 18% 12%, rgba(26,115,232,.14), transparent 30%),
+      radial-gradient(circle at 86% 10%, rgba(15,157,88,.14), transparent 28%),
+      linear-gradient(160deg,#ffffff,#f3f8ff 58%,#eefaf6)!important;
+  }
+  .splash-card,.splash-card h1,.app-splash-title{color:var(--mobile-text)!important;}
+  .splash p,.app-splash-sub{color:var(--mobile-muted)!important;}
+  .loader,.app-loader{background:#dce9ff!important;}
+  .loader:before,.app-loader:before{background:linear-gradient(90deg,var(--gpay-blue),var(--gpay-green))!important;}
+
+  .logout{
+    background:#fff5f5!important;
+    color:#c5221f!important;
+    border:1px solid #ffd9d9!important;
+    box-shadow:var(--mobile-shadow)!important;
+  }
+
+  .box{
+    background:#ffffff!important;
+    color:var(--mobile-text)!important;
+    border:1px solid var(--mobile-border)!important;
+    border-radius:28px!important;
+    box-shadow:var(--mobile-shadow)!important;
+    padding:26px 22px!important;
+  }
+  .box p{color:var(--mobile-muted)!important;}
+  .box .logo{background:linear-gradient(135deg,var(--gpay-blue),var(--gpay-green))!important;}
+  .box .btn{background:linear-gradient(135deg,var(--gpay-blue),#3d8bff)!important;}
+}
+
+@media (min-width: 769px){
+  .app,.phone-card{background:#f7faff!important;}
+  .top,.head,.hero{
+    background:linear-gradient(180deg,#ffffff,#f2f7ff)!important;
+    color:#17233c!important;
+  }
+  .iconbtn,.back,.profile,.icon{background:#fff!important;color:#1a73e8!important;border:1px solid #e7eef8!important;}
+  .title p,.sub,.phone{color:#667085!important;}
+}
+
+
+/* =========================================================
+   FINAL LIGHT MOBILE APP STYLE - Google Pay / PhonePe inspired
+   Requested: remove dark colors, improve readable content, smooth app feel.
+   Presentation only. No backend/form/route changes.
+   ========================================================= */
+:root{
+  --pay-bg:#f6f9ff;
+  --pay-bg-2:#eef6ff;
+  --pay-card:#ffffff;
+  --pay-text:#14213d;
+  --pay-muted:#667085;
+  --pay-line:#e4ecf7;
+  --pay-blue:#1a73e8;
+  --pay-green:#12a66a;
+  --pay-purple:#6739f4;
+  --pay-orange:#ff8a00;
+  --pay-shadow:0 10px 28px rgba(55,85,130,.10);
+  --pay-shadow-soft:0 6px 18px rgba(55,85,130,.07);
+}
+
+html,body{
+  background:linear-gradient(180deg,#ffffff 0%,var(--pay-bg) 56%,var(--pay-bg-2) 100%)!important;
+  color:var(--pay-text)!important;
+}
+body{overflow-x:hidden!important;}
+body:before{display:none!important;}
+
+/* Remove all dark hero/splash blocks */
+.splash{display:none!important;}
+.app-splash{
+  background:radial-gradient(circle at 18% 8%,rgba(26,115,232,.13),transparent 30%),radial-gradient(circle at 85% 10%,rgba(18,166,106,.13),transparent 28%),linear-gradient(160deg,#fff,#f3f8ff 60%,#f0fff8)!important;
+}
+.app-splash-logo,.splash-logo,.logo,.avatar{
+  background:linear-gradient(135deg,var(--pay-blue),var(--pay-green))!important;
+  color:#fff!important;
+  box-shadow:0 14px 30px rgba(26,115,232,.20)!important;
+}
+.app-splash-title,.splash-card h1{color:var(--pay-text)!important;}
+.app-splash-sub,.splash p{color:var(--pay-muted)!important;}
+.app-loader,.loader{background:#dce9ff!important;}
+.app-loader:before,.loader:before{background:linear-gradient(90deg,var(--pay-blue),var(--pay-green))!important;}
+
+/* App phone shell */
+.screen,.app,.phone-card{
+  background:linear-gradient(180deg,#ffffff 0%,#f7faff 50%,#eef6ff 100%)!important;
+  color:var(--pay-text)!important;
+}
+.phone-card,.app{
+  box-shadow:0 18px 50px rgba(55,85,130,.12)!important;
+  border:1px solid rgba(228,236,247,.95)!important;
+}
+
+/* Light readable headers */
+.hero,.top,.head{
+  background:radial-gradient(circle at 12% 0%,rgba(26,115,232,.13),transparent 34%),radial-gradient(circle at 86% 8%,rgba(18,166,106,.13),transparent 30%),linear-gradient(180deg,#ffffff 0%,#f2f7ff 100%)!important;
+  color:var(--pay-text)!important;
+  border:1px solid rgba(228,236,247,.95)!important;
+  border-top:0!important;
+  box-shadow:0 10px 28px rgba(55,85,130,.08)!important;
+}
+.hero h1,.top h1,.head h1,.title h1,h1,h2,h3,.patient,.tilename,.amount,.amt,strong{
+  color:var(--pay-text)!important;
+}
+.hero .sub,.top .sub,.head .sub,.title p,.phone,.sub,p,.hint,.tiledesc,.date,.footer,.muted{
+  color:var(--pay-muted)!important;
+}
+
+/* Cards like payment app */
+.body,.content{background:transparent!important;}
+.card,.tile,.txn,.stat,.stats .stat,.item,.box,.login-card,.signup-card,.qr-card,.profile-card,.section-card,.filter,.note{
+  background:var(--pay-card)!important;
+  border:1px solid var(--pay-line)!important;
+  color:var(--pay-text)!important;
+  box-shadow:var(--pay-shadow-soft)!important;
+}
+.card,.tile,.txn,.item,.box{border-radius:24px!important;}
+.stats .stat,.stat{border-radius:20px!important;min-height:72px!important;}
+.stat span,.stats .stat span{color:var(--pay-muted)!important;}
+.stat strong,.stats .stat strong{color:var(--pay-text)!important;}
+.stat.pay strong{color:var(--pay-green)!important;}
+.tileico,.ico,.pavatar,.iconbtn,.back,.profile,.icon{
+  background:linear-gradient(135deg,#eef5ff,#ecfff6)!important;
+  color:var(--pay-blue)!important;
+  border:1px solid var(--pay-line)!important;
+  box-shadow:inset 0 0 0 1px rgba(26,115,232,.03)!important;
+}
+.actiongrid .tile:nth-child(2) .tileico,.actiongrid .tile:nth-child(2) .ico{color:var(--pay-purple)!important;background:linear-gradient(135deg,#f4f0ff,#ffffff)!important;}
+.section a,.link{color:var(--pay-blue)!important;}
+
+/* Login page readability */
+.field label,label{color:#24324d!important;font-weight:850!important;}
+.phone-wrap{align-items:center!important;}
+.country,.input,input,select,textarea{
+  background:#ffffff!important;
+  color:var(--pay-text)!important;
+  border:1px solid #dce6f3!important;
+  box-shadow:none!important;
+}
+.country{color:#24324d!important;}
+.input:focus,input:focus,select:focus,textarea:focus{
+  border-color:rgba(26,115,232,.55)!important;
+  box-shadow:0 0 0 4px rgba(26,115,232,.10)!important;
+}
+.input::placeholder,input::placeholder,textarea::placeholder{color:#98a2b3!important;}
+.switch{background:#eef4ff!important;border:1px solid var(--pay-line)!important;}
+.switch button{color:#667085!important;}
+.switch button.active{background:#fff!important;color:var(--pay-blue)!important;box-shadow:0 6px 18px rgba(55,85,130,.09)!important;}
+.btn,button[type="submit"],input[type="submit"]{
+  background:linear-gradient(135deg,var(--pay-blue),#4f93ff)!important;
+  color:#fff!important;
+  box-shadow:0 12px 24px rgba(26,115,232,.20)!important;
+  border:0!important;
+}
+.sim-btn,.blue,.blue2{
+  background:#eef5ff!important;
+  color:var(--pay-blue)!important;
+  border:1px solid #dbeafe!important;
+  box-shadow:none!important;
+}
+.light,.btn-light,.btn.ghost{background:#fff!important;color:#344054!important;border:1px solid var(--pay-line)!important;}
+
+/* Status chips */
+.green{background:#e9f7ef!important;color:#137333!important;}
+.amber{background:#fff8e1!important;color:#b06000!important;}
+.blue,.chip.blue{background:#e8f0fe!important;color:#1a73e8!important;}
+.error{background:#fff1f2!important;color:#be123c!important;}
+.warning{background:#fff7ed!important;color:#c2410c!important;}
+.success{background:#ecfdf5!important;color:#047857!important;}
+
+/* Bottom navigation */
+.bottom,.app-bottom-nav{
+  background:rgba(255,255,255,.96)!important;
+  border-top:1px solid var(--pay-line)!important;
+  box-shadow:0 -12px 30px rgba(55,85,130,.10)!important;
+  backdrop-filter:blur(18px)!important;
+  -webkit-backdrop-filter:blur(18px)!important;
+}
+.nav,.app-bottom-nav a{color:#667085!important;}
+.nav.active,.nav:hover,.app-bottom-nav a.is-active,.app-bottom-nav a:hover{
+  background:#eef5ff!important;
+  color:var(--pay-blue)!important;
+}
+.nav b,.app-bottom-nav b{font-size:20px!important;}
+.logout{background:#fff5f5!important;color:#c5221f!important;border:1px solid #ffd9d9!important;}
+
+/* Smooth movement */
+.card,.tile,.txn,.item,.nav,.iconbtn,.btn,button,.stat{transition:transform .18s ease, box-shadow .18s ease, background .18s ease!important;}
+.card:active,.tile:active,.txn:active,.item:active,.nav:active,.iconbtn:active,.btn:active,button:active{transform:scale(.985)!important;}
+.content,.screen{scroll-behavior:smooth!important;-webkit-overflow-scrolling:touch!important;}
+
+/* Mobile exact fitting */
+@media(max-width:700px){
+  html,body{height:100%!important;overflow:hidden!important;}
+  .screen{height:100dvh!important;overflow:auto!important;padding:0!important;}
+  .phone-card{min-height:100dvh!important;max-width:100%!important;border-radius:0!important;border:0!important;box-shadow:none!important;}
+  .hero{border-radius:0 0 30px 30px!important;padding:34px 20px 22px!important;}
+  .body{padding:20px!important;}
+  .app{height:100dvh!important;max-width:100%!important;border-radius:0!important;border:0!important;box-shadow:none!important;}
+  .top{border-radius:0 0 28px 28px!important;}
+  .content{padding-bottom:104px!important;}
+  .bottom{border-radius:22px 22px 0 0!important;}
+}
+
+@media(min-width:701px){
+  body{background:#eef4fb!important;}
+  .screen{display:grid!important;place-items:center!important;padding:24px!important;}
+  .phone-card,.app{border-radius:32px!important;}
+  .hero,.top{border-radius:32px 32px 30px 30px!important;}
+}
+
+/* =========================================================
+   DOCTOR LOGIN FINAL CLEAN LIGHT STYLE
+   FYERS-like simple login + Google Pay/PhonePe light colors.
+   Presentation only. No backend route/form changes.
+   ========================================================= */
+html,body{
+  background:#f5f8ff!important;
+}
+.screen{
+  background:
+    radial-gradient(circle at 8% 0%, rgba(26,115,232,.10), transparent 32%),
+    radial-gradient(circle at 94% 2%, rgba(18,166,106,.10), transparent 30%),
+    linear-gradient(180deg,#ffffff 0%,#f7faff 55%,#eef6ff 100%)!important;
+}
+.phone-card{
+  background:transparent!important;
+}
+.hero{
+  background:#ffffff!important;
+  color:#14213d!important;
+  border:1px solid #e5edf8!important;
+  box-shadow:0 12px 32px rgba(50,80,130,.08)!important;
+  position:relative!important;
+  overflow:hidden!important;
+}
+.hero:before{
+  content:"";
+  position:absolute;
+  inset:-80px -80px auto auto;
+  width:190px;
+  height:190px;
+  border-radius:50%;
+  background:rgba(26,115,232,.10);
+}
+.hero:after{
+  content:"";
+  position:absolute;
+  left:-70px;
+  bottom:-90px;
+  width:180px;
+  height:180px;
+  border-radius:50%;
+  background:rgba(18,166,106,.10);
+}
+.hero .logo-row{position:relative;z-index:1;}
+.hero .logo{
+  background:linear-gradient(135deg,#1a73e8,#12a66a)!important;
+  color:#fff!important;
+  border-radius:18px!important;
+  box-shadow:0 14px 28px rgba(26,115,232,.18)!important;
+}
+.hero h1{color:#14213d!important;font-weight:950!important;}
+.hero .sub{color:#667085!important;}
+.body{padding:20px!important;}
+.field label{color:#263752!important;font-size:12px!important;letter-spacing:.01em!important;}
+.phone-wrap{gap:10px!important;}
+.country,.input{
+  background:#ffffff!important;
+  border:1px solid #dfe8f5!important;
+  color:#14213d!important;
+  box-shadow:0 4px 12px rgba(50,80,130,.04)!important;
+}
+.input{font-size:16px!important;font-weight:750!important;}
+.input::placeholder{color:#98a2b3!important;font-weight:600!important;}
+.country{font-weight:950!important;}
+.sim-btn{
+  margin-top:10px!important;
+  background:#eef5ff!important;
+  color:#1a73e8!important;
+  border:1px solid #dbeafe!important;
+  box-shadow:none!important;
+  font-weight:950!important;
+}
+.hint{
+  background:#ffffff!important;
+  border:1px dashed #dbeafe!important;
+  border-radius:14px!important;
+  padding:10px 12px!important;
+  color:#667085!important;
+  margin-top:10px!important;
+}
+.switch{
+  background:#edf4ff!important;
+  border:1px solid #dfe8f5!important;
+  border-radius:18px!important;
+  padding:5px!important;
+}
+.switch button{
+  color:#5f6f89!important;
+  font-weight:950!important;
+}
+.switch button.active{
+  color:#1a73e8!important;
+  background:#ffffff!important;
+  box-shadow:0 8px 18px rgba(50,80,130,.08)!important;
+}
+.btn,button[type="submit"]{
+  background:linear-gradient(135deg,#1a73e8,#3d8bff)!important;
+  color:#ffffff!important;
+  box-shadow:0 14px 30px rgba(26,115,232,.20)!important;
+  font-weight:950!important;
+}
+.footer{
+  color:#667085!important;
+  background:transparent!important;
+}
+.number-picker{
+  margin-top:10px;
+  background:#ffffff;
+  border:1px solid #dfe8f5;
+  border-radius:18px;
+  padding:10px;
+  box-shadow:0 8px 20px rgba(50,80,130,.08);
+}
+.picker-title{
+  font-size:12px;
+  font-weight:950;
+  color:#667085;
+  margin:2px 4px 8px;
+}
+.picker-number{
+  width:100%;
+  border:1px solid #e5edf8!important;
+  background:#f8fbff!important;
+  color:#14213d!important;
+  border-radius:14px!important;
+  min-height:42px!important;
+  margin-top:7px;
+  font-weight:950!important;
+  box-shadow:none!important;
+}
+.picker-number:active{transform:scale(.985)!important;}
+@media(max-width:700px){
+  .hero{margin:14px 14px 0!important;border-radius:28px!important;padding:28px 20px 20px!important;}
+  .body{padding:20px 18px!important;}
+}
+
+
+/* =========================================================
+   FINAL FIX: Doctor signup compact real-app presentation
+   Fixes tall password/secret code area. Strong override because app-ui.css
+   loads after template inline CSS.
+   ========================================================= */
+.logo img,
+.app-splash-logo img{
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  padding:5px!important;
+  border-radius:16px!important;
+}
+.app-splash-logo{
+  width:92px!important;
+  height:92px!important;
+  border-radius:28px!important;
+  background:#fff!important;
+  animation:saveeraFadeSpin 3s ease-in-out both!important;
+}
+@keyframes saveeraFadeSpin{
+  0%{opacity:0;transform:scale(.82) rotate(-16deg)}
+  28%{opacity:1;transform:scale(1.04) rotate(0deg)}
+  55%{opacity:1;transform:scale(1) rotate(360deg)}
+  82%{opacity:1;transform:scale(1.02) rotate(360deg)}
+  100%{opacity:0;transform:scale(.96) rotate(360deg)}
+}
+
+/* Doctor signup page: full app style, no website feel */
+body:has(#doctorSignupForm){
+  background:linear-gradient(180deg,#f8fbff 0%,#eef5ff 100%)!important;
+}
+body:has(#doctorSignupForm) .page-content{
+  max-width:100%!important;
+  padding:0!important;
+}
+body:has(#doctorSignupForm) .signup-page{
+  width:100%!important;
+  min-height:calc(100vh - 70px)!important;
+  padding:18px 14px 92px!important;
+  background:linear-gradient(180deg,#f8fbff 0%,#eef5ff 100%)!important;
+}
+body:has(#doctorSignupForm) .signup-wrap{
+  width:min(100%,1120px)!important;
+  max-width:1120px!important;
+  margin:0 auto!important;
+}
+body:has(#doctorSignupForm) .page-head{
+  text-align:left!important;
+  background:#ffffff!important;
+  border:1px solid #e6eef8!important;
+  border-radius:26px!important;
+  padding:20px 20px!important;
+  box-shadow:0 12px 34px rgba(46,80,130,.08)!important;
+  margin-bottom:14px!important;
+}
+body:has(#doctorSignupForm) .page-head h1{
+  font-size:24px!important;
+  line-height:1.12!important;
+  font-weight:950!important;
+  color:#111827!important;
+}
+body:has(#doctorSignupForm) .page-head p{
+  font-size:12px!important;
+  color:#667085!important;
+  line-height:1.45!important;
+}
+body:has(#doctorSignupForm) .signup-grid{
+  gap:12px!important;
+  margin-bottom:12px!important;
+}
+body:has(#doctorSignupForm) .panel-card{
+  border-radius:26px!important;
+  border:1px solid #e6eef8!important;
+  background:#ffffff!important;
+  box-shadow:0 12px 34px rgba(46,80,130,.08)!important;
+  overflow:hidden!important;
+}
+body:has(#doctorSignupForm) .panel-head{
+  padding:14px 16px!important;
+  background:linear-gradient(180deg,#ffffff,#f8fbff)!important;
+  border-bottom:1px solid #edf2fa!important;
+}
+body:has(#doctorSignupForm) .panel-head h2{
+  font-size:16px!important;
+  font-weight:950!important;
+  color:#14213d!important;
+}
+body:has(#doctorSignupForm) .panel-body{
+  padding:14px 16px!important;
+}
+body:has(#doctorSignupForm) .form-grid{
+  gap:9px 12px!important;
+}
+body:has(#doctorSignupForm) .form-group label{
+  margin-bottom:4px!important;
+  font-size:12px!important;
+  font-weight:900!important;
+  color:#24324d!important;
+}
+body:has(#doctorSignupForm) .form-input,
+body:has(#doctorSignupForm) .form-select,
+body:has(#doctorSignupForm) input.form-input,
+body:has(#doctorSignupForm) select.form-select{
+  height:34px!important;
+  min-height:34px!important;
+  max-height:34px!important;
+  padding:5px 11px!important;
+  border-radius:12px!important;
+  font-size:13px!important;
+  font-weight:600!important;
+  line-height:20px!important;
+  background:#ffffff!important;
+  border:1px solid #dce6f3!important;
+  box-shadow:none!important;
+}
+body:has(#doctorSignupForm) input[type="file"].form-input{
+  height:34px!important;
+  min-height:34px!important;
+  padding:4px 9px!important;
+  font-size:12px!important;
+}
+body:has(#doctorSignupForm) #password,
+body:has(#doctorSignupForm) #secret_code,
+body:has(#doctorSignupForm) #login_id{
+  height:32px!important;
+  min-height:32px!important;
+  max-height:32px!important;
+  padding:4px 10px!important;
+  border-radius:12px!important;
+  font-size:13px!important;
+}
+body:has(#doctorSignupForm) .form-textarea,
+body:has(#doctorSignupForm) textarea.form-textarea{
+  min-height:58px!important;
+  height:58px!important;
+  padding:8px 11px!important;
+  border-radius:14px!important;
+  font-size:13px!important;
+  resize:vertical!important;
+}
+body:has(#doctorSignupForm) .field-note{
+  margin-top:3px!important;
+  font-size:10.5px!important;
+  line-height:1.35!important;
+  color:#667085!important;
+}
+body:has(#doctorSignupForm) .note-box{
+  padding:10px 12px!important;
+  border-radius:14px!important;
+  font-size:12px!important;
+  line-height:1.5!important;
+  background:#fff8ef!important;
+  border-color:#ffd7ad!important;
+}
+body:has(#doctorSignupForm) .terms-box{
+  min-height:44px!important;
+  padding:10px 12px!important;
+  border-radius:14px!important;
+  align-items:center!important;
+}
+body:has(#doctorSignupForm) .terms-box input[type="checkbox"]{
+  width:16px!important;
+  height:16px!important;
+  min-height:16px!important;
+  margin:0 8px 0 0!important;
+  flex:0 0 16px!important;
+}
+body:has(#doctorSignupForm) .terms-box label{
+  font-size:12px!important;
+  line-height:1.45!important;
+}
+body:has(#doctorSignupForm) .action-bar{
+  position:sticky!important;
+  bottom:12px!important;
+  z-index:20!important;
+  padding:10px 0!important;
+  margin-top:8px!important;
+}
+body:has(#doctorSignupForm) .submit-btn{
+  min-width:220px!important;
+  height:44px!important;
+  min-height:44px!important;
+  padding:0 22px!important;
+  border-radius:999px!important;
+  background:linear-gradient(135deg,#1a73e8,#3d8bff)!important;
+  box-shadow:0 18px 34px rgba(26,115,232,.24)!important;
+  font-size:15px!important;
+  font-weight:950!important;
+}
+
+@media(max-width:700px){
+  html:has(#doctorSignupForm),
+  body:has(#doctorSignupForm){
+    height:100%!important;
+    overflow:hidden!important;
+  }
+  body:has(#doctorSignupForm) .topbar{
+    display:none!important;
+  }
+  body:has(#doctorSignupForm) .signup-page{
+    height:100dvh!important;
+    min-height:100dvh!important;
+    overflow-y:auto!important;
+    -webkit-overflow-scrolling:touch!important;
+    padding:14px 12px 90px!important;
+  }
+  body:has(#doctorSignupForm) .signup-wrap{
+    max-width:430px!important;
+  }
+  body:has(#doctorSignupForm) .page-head{
+    border-radius:24px!important;
+    padding:18px 18px!important;
+  }
+  body:has(#doctorSignupForm) .page-head:before{
+    content:"";
+    display:block;
+    width:58px;
+    height:58px;
+    margin-bottom:12px;
+    border-radius:20px;
+    background:#fff url('/static/icons/Saveera-Hospital_logo-removebg-preview.png') center/contain no-repeat;
+    box-shadow:0 12px 26px rgba(26,115,232,.14);
+  }
+  body:has(#doctorSignupForm) .page-head h1{
+    font-size:22px!important;
+  }
+  body:has(#doctorSignupForm) .signup-grid,
+  body:has(#doctorSignupForm) .form-grid{
+    grid-template-columns:1fr!important;
+  }
+  body:has(#doctorSignupForm) .panel-card{
+    border-radius:24px!important;
+  }
+  body:has(#doctorSignupForm) .panel-head{
+    padding:13px 15px!important;
+  }
+  body:has(#doctorSignupForm) .panel-body{
+    padding:13px 15px!important;
+  }
+  body:has(#doctorSignupForm) .form-input,
+  body:has(#doctorSignupForm) .form-select,
+  body:has(#doctorSignupForm) input.form-input,
+  body:has(#doctorSignupForm) select.form-select{
+    height:36px!important;
+    min-height:36px!important;
+    max-height:36px!important;
+  }
+  body:has(#doctorSignupForm) #password,
+  body:has(#doctorSignupForm) #secret_code,
+  body:has(#doctorSignupForm) #login_id{
+    height:34px!important;
+    min-height:34px!important;
+    max-height:34px!important;
+  }
+  body:has(#doctorSignupForm) .action-bar{
+    position:fixed!important;
+    left:0!important;
+    right:0!important;
+    bottom:0!important;
+    background:rgba(248,251,255,.92)!important;
+    backdrop-filter:blur(18px)!important;
+    -webkit-backdrop-filter:blur(18px)!important;
+    border-top:1px solid #e6eef8!important;
+    padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px))!important;
+  }
+  body:has(#doctorSignupForm) .submit-btn{
+    width:100%!important;
+  }
+  body:has(#doctorSignupForm) .bottom-note{
+    margin-bottom:14px!important;
+  }
+}
+
+/* ===== FINAL OVERRIDE (DO NOT REMOVE ANYTHING ABOVE) ===== */
+body:has(#doctorSignupForm) .login-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  align-items: start !important;
+}
+
+body:has(#doctorSignupForm) .login-grid .form-group {
+  grid-column: auto !important;
+}
+
+body:has(#doctorSignupForm) .login-grid #login_id,
+body:has(#doctorSignupForm) .login-grid #password,
+body:has(#doctorSignupForm) .login-grid #secret_code {
+  width: 100% !important;
+  height: 34px !important;
+  min-height: 34px !important;
+}
+
+/* Mobile only → stack */
+@media(max-width:700px){
+  body:has(#doctorSignupForm) .login-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* ===== KIMS SAVEERA LOGO STANDARDIZATION - LIVE FIX ===== */
+.app-splash-logo{
+  width:96px!important;
+  height:96px!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  color:transparent!important;
+  font-size:0!important;
+  overflow:visible!important;
+}
+.app-splash-logo img{
+  display:block!important;
+  width:92px!important;
+  height:auto!important;
+  margin:0 auto!important;
+  object-fit:contain!important;
+  background:transparent!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+}

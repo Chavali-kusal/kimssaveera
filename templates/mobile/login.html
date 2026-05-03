@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>KIMS Saveera Doctor App</title>
+
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#111827">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="KIMS Saveera">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="/static/icons/icon-192x192.png">
+
+  <style>
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{height:100%;margin:0}
+    body{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:#0f172a;color:#0f172a;overflow:hidden}
+
+    .splash{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:radial-gradient(circle at 20% 15%,rgba(255,107,53,.42),transparent 30%),radial-gradient(circle at 80% 80%,rgba(37,99,235,.32),transparent 30%),linear-gradient(145deg,#07111f,#111827 55%,#172554);animation:hideSplash .45s ease 3s forwards}
+    .splash-card{text-align:center;color:#fff;animation:splashPop .9s ease}
+    .splash-logo{width:132px;height:132px;margin:0 auto 18px;display:grid;place-items:center;background:transparent!important;border-radius:0!important;box-shadow:none!important;animation:logoPulse 1.6s ease-in-out infinite}
+    .splash-logo img{width:126px;height:auto;object-fit:contain;display:block}
+    .splash h1{margin:0;font-size:28px;font-weight:950}.splash p{margin:8px 0 0;font-size:13px;color:#cbd5e1;font-weight:700}
+    .loader{width:140px;height:5px;background:rgba(255,255,255,.18);border-radius:999px;margin:24px auto 0;overflow:hidden}.loader:before{content:"";display:block;width:45%;height:100%;background:linear-gradient(90deg,#ff8a4c,#ff5b2e);border-radius:999px;animation:load 1.2s ease-in-out infinite}
+    @keyframes hideSplash{to{opacity:0;visibility:hidden;pointer-events:none}}@keyframes splashPop{from{opacity:0;transform:translateY(18px) scale(.94)}to{opacity:1;transform:none}}@keyframes logoPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}@keyframes load{0%{transform:translateX(-120%)}100%{transform:translateX(260%)}}
+
+    .screen{height:100%;overflow:auto;background:radial-gradient(circle at 85% 8%,rgba(255,107,53,.18),transparent 26%),linear-gradient(180deg,#fff7ed 0%,#f8fbff 45%,#eef4ff 100%);padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+    .phone-card{min-height:100%;max-width:520px;margin:0 auto;background:rgba(255,255,255,.96);overflow:hidden}.hero{padding:48px 24px 30px;background:radial-gradient(circle at 90% -10%,rgba(255,255,255,.24),transparent 35%),linear-gradient(135deg,#111827,#1e293b);color:#fff;border-bottom-left-radius:38px;border-bottom-right-radius:38px;box-shadow:0 18px 35px rgba(15,23,42,.18)}
+    .logo-row{display:flex;align-items:center;gap:16px}.app-logo{width:82px;height:82px;min-width:82px;display:grid;place-items:center;background:transparent!important;border-radius:0!important;padding:0!important;box-shadow:none!important}.app-logo img{width:100%;height:auto;object-fit:contain;display:block}
+    h1{margin:0;font-size:27px;line-height:1.05;font-weight:950}.sub{margin:8px 0 0;color:#d8e0ee;font-size:13px;line-height:1.45;font-weight:600}.body{padding:26px 22px 22px}
+    .flash{padding:12px 14px;border-radius:16px;margin-bottom:14px;font-size:13px;font-weight:800}.error{background:#fff1f2;color:#be123c}.warning{background:#fff7ed;color:#c2410c}.success{background:#ecfdf5;color:#047857}.info{background:#eff6ff;color:#1d4ed8}
+    .field{margin-bottom:16px}.field label{display:block;font-size:13px;font-weight:950;color:#1e293b;margin:0 0 8px}.phone-wrap{display:flex;gap:9px}.country{width:76px;border:1px solid #d9e2ef;background:#fff;border-radius:18px;padding:15px 10px;font-size:16px;font-weight:950;color:#0f172a;text-align:center;box-shadow:0 8px 22px rgba(15,23,42,.04)}
+    .input{width:100%;border:1px solid #d9e2ef;background:#fff;border-radius:18px;padding:15px;font-size:17px;font-weight:700;outline:none;transition:.2s;box-shadow:0 8px 22px rgba(15,23,42,.04)}.input:focus{border-color:#ff6b35;box-shadow:0 0 0 4px rgba(255,107,53,.13)}
+    .sim-btn{margin-top:10px;width:100%;border:1px solid #bfdbfe;border-radius:16px;background:#eff6ff;color:#1d4ed8;padding:13px;font-weight:950;font-size:13px;cursor:pointer}.hint{font-size:12px;color:#64748b;margin-top:10px;line-height:1.5;background:#f8fafc;border:1px dashed #dbeafe;border-radius:14px;padding:11px 12px}
+    .number-picker{margin-top:10px;background:#f8fafc;border:1px solid #dbeafe;border-radius:16px;padding:10px}.picker-title{font-size:12px;color:#475569;font-weight:950;margin-bottom:8px}.picker-number{width:100%;border:0;background:#fff;color:#0f172a;padding:12px;border-radius:12px;font-weight:950;margin-bottom:8px;cursor:pointer;text-align:left}
+    .switch{display:flex;gap:8px;background:#edf2f8;border-radius:20px;padding:6px;margin:16px 0;border:1px solid #dbeafe}.switch button{flex:1;border:0;border-radius:15px;background:transparent;padding:13px 8px;font-weight:950;color:#64748b;cursor:pointer}.switch button.active{background:#fff;color:#ff5b2e;box-shadow:0 10px 25px rgba(15,23,42,.1)}
+    .btn{width:100%!important;border:0!important;background:linear-gradient(135deg,#ff7a3d,#ff5b2e)!important;color:#fff!important;border-radius:20px!important;padding:17px!important;font-size:17px!important;font-weight:950!important;box-shadow:0 16px 32px rgba(255,107,53,.30)!important;cursor:pointer}.footer{padding:0 24px 24px;text-align:center;color:#64748b;font-size:12px;font-weight:600}.hide{display:none!important}
+    @media(min-width:700px){body{background:#e9eef6}.screen{display:grid;place-items:center;padding:24px}.phone-card{min-height:auto;width:430px;border-radius:34px;box-shadow:0 30px 90px rgba(15,23,42,.20)}}
+  </style>
+</head>
+<body>
+  <div class="splash">
+    <div class="splash-card">
+      <div class="splash-logo"><img src="{{ url_for('static', filename='icons/Saveera-Hospital_logo-removebg-preview.png') }}" alt="Saveera Hospital"></div>
+      <h1>KIMS Saveera</h1><p>Doctor Referral App</p><div class="loader"></div>
+    </div>
+  </div>
+
+  <main class="screen">
+    <section class="phone-card">
+      <div class="hero"><div class="logo-row"><div class="app-logo"><img src="{{ url_for('static', filename='icons/Saveera-Hospital_logo-removebg-preview.png') }}" alt="Saveera Hospital"></div><div><h1>Welcome Doctor</h1><p class="sub">Login securely and track your referrals.</p></div></div></div>
+      <div class="body">
+        {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}{% endif %}{% endwith %}
+        <form method="post" autocomplete="on">
+          <input type="hidden" name="login_method" id="login_method" value="secret_code">
+          <div class="field"><label for="phone">Doctor Mobile Number</label><div class="phone-wrap"><div class="country">+91</div><input class="input" id="phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel" maxlength="10" placeholder="Enter registered mobile" required></div><button class="sim-btn" type="button" onclick="tryPickMobile()">Use my mobile number</button><div class="hint" id="simHint">If auto-pick is unavailable, enter your registered 10-digit mobile number manually.</div><div class="number-picker hide" id="numberPicker" aria-live="polite"></div></div>
+          <div class="switch" role="tablist"><button type="button" id="secretBtn" class="active" onclick="setMode('secret_code')">Secret Code</button><button type="button" id="passBtn" onclick="setMode('password')">Switch to Password</button></div>
+          <div class="field" id="secretBox"><label for="secret_code">Secret Code</label><input class="input" id="secret_code" name="secret_code" type="password" inputmode="numeric" placeholder="Enter secret code" required></div>
+          <div class="field hide" id="passwordBox"><label for="password">Password</label><input class="input" id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter password"></div>
+          <button class="btn" type="submit">Login Securely</button>
+        </form>
+      </div>
+      <div class="footer">Secure doctor access • Referral tracking • Hospital payout status</div>
+    </section>
+  </main>
+<script>
+  function setMode(mode){document.getElementById('login_method').value=mode;const isSecret=mode==='secret_code';document.getElementById('secretBox').classList.toggle('hide',!isSecret);document.getElementById('passwordBox').classList.toggle('hide',isSecret);document.getElementById('secretBtn').classList.toggle('active',isSecret);document.getElementById('passBtn').classList.toggle('active',!isSecret);document.getElementById('secret_code').required=isSecret;document.getElementById('password').required=!isSecret;if(isSecret){document.getElementById('password').value='';document.getElementById('secret_code').focus();}else{document.getElementById('secret_code').value='';document.getElementById('password').focus();}}
+  function cleanPhone(number){return String(number||'').replace(/\s+/g,'').replace(/^\+91/,'').replace(/^91/,'').replace(/\D/g,'').slice(-10);}
+  function moveToSecretIfReady(){const phoneInput=document.getElementById('phone');const phone=cleanPhone(phoneInput.value);phoneInput.value=phone;if(phone.length===10&&document.getElementById('login_method').value==='secret_code'){document.getElementById('secret_code').focus();}}
+  function showNumberPicker(numbers){const box=document.getElementById('numberPicker');box.innerHTML='';const clean=[...new Set((numbers||[]).map(cleanPhone).filter(n=>n.length===10))];if(!clean.length)return false;box.classList.remove('hide');const title=document.createElement('div');title.className='picker-title';title.textContent=clean.length>1?'Choose mobile number':'Detected mobile number';box.appendChild(title);clean.forEach(n=>{const btn=document.createElement('button');btn.type='button';btn.className='picker-number';btn.textContent='+91 '+n;btn.onclick=()=>{document.getElementById('phone').value=n;box.classList.add('hide');document.getElementById('secret_code').focus();};box.appendChild(btn);});return true;}
+  function tryPickMobile(){const hint=document.getElementById('simHint');if(window.AndroidApp&&typeof window.AndroidApp.getPhoneNumbers==='function'){try{let result=window.AndroidApp.getPhoneNumbers();let numbers=Array.isArray(result)?result:JSON.parse(result);if(showNumberPicker(numbers)){hint.textContent='Select the mobile number you want to use.';return;}}catch(e){try{let result=window.AndroidApp.getPhoneNumbers();if(showNumberPicker(String(result).split(','))){hint.textContent='Select the mobile number you want to use.';return;}}catch(ignored){}}}if(window.AndroidApp&&typeof window.AndroidApp.getPhoneNumber==='function'){const number=cleanPhone(window.AndroidApp.getPhoneNumber());if(number.length===10){document.getElementById('phone').value=number;document.getElementById('secret_code').focus();hint.textContent='Mobile number detected. Enter secret code.';return;}}document.getElementById('phone').focus();hint.textContent='Auto-pick is unavailable on this device/browser. Please enter mobile number manually.';}
+  document.getElementById('phone').addEventListener('input',moveToSecretIfReady);window.addEventListener('load',function(){setMode('secret_code');setTimeout(function(){tryPickMobile();},800);});if('serviceWorker'in navigator){navigator.serviceWorker.register('/service-worker.js').catch(()=>{});}
+</script>
+</body>
+</html>

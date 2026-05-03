@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}HealthQR{% endblock %}</title>
+
+  <link rel="manifest" href="{{ url_for('pwa_manifest') }}">
+  <meta name="theme-color" content="#ff6b35">
+  <meta name="background-color" content="#eef1f5">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="HealthQR">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/icon-192x192.png') }}">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      overflow-x: hidden;
+      font-family: Arial, sans-serif;
+      background: #eef1f5;
+      color: #1f2937;
+    }
+
+    a {
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .topbar {
+      width: 100%;
+      background: #ffffff;
+      border-bottom: 1px solid #d9dee7;
+      padding: 12px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .topbar-inner {
+      width: 100%;
+      max-width: 1350px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      flex: 1 1 auto;
+    }
+
+    .main-logo {
+      height: 52px !important;
+      width: auto !important;
+      object-fit: contain;
+      display: block !important;
+      background: transparent !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      margin-right: 6px;
+      flex-shrink: 0;
+    }
+
+    .brand-text {
+      min-width: 0;
+    }
+
+    .brand-text h2 {
+      margin: 0;
+      font-size: 18px;
+      color: #1f2937;
+      line-height: 1.2;
+      word-break: break-word;
+    }
+
+    .brand-text p {
+      margin: 3px 0 0;
+      font-size: 12px;
+      color: #6b7280;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 14px 18px;
+      flex-wrap: wrap;
+      flex: 1 1 auto;
+    }
+
+    .topbar-right a {
+      color: #374151;
+      font-size: 14px;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: color 0.2s ease;
+    }
+
+    .topbar-right a:hover {
+      color: #f47c33;
+    }
+
+    .page-content {
+      width: 100%;
+      max-width: 1350px;
+      margin: 0 auto;
+      padding: 0 16px 24px;
+    }
+
+    .flash-stack {
+      width: 100%;
+      max-width: 1100px;
+      margin: 18px auto 0;
+      padding: 0 16px;
+    }
+
+    .flash {
+      position: relative;
+      padding: 12px 42px 12px 14px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      font-size: 14px;
+      border: 1px solid transparent;
+      opacity: 1;
+      transform: translateX(0);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      word-break: break-word;
+    }
+
+    .flash.flash-hide {
+      opacity: 0;
+      transform: translateX(30px);
+      pointer-events: none;
+    }
+
+    .flash.success {
+      background: #eaf7ee;
+      color: #256d3f;
+      border-color: #bfe3ca;
+    }
+
+    .flash.error,
+    .flash.danger {
+      background: #fdecec;
+      color: #b42318;
+      border-color: #f5c2c7;
+    }
+
+    .flash.warning {
+      background: #fff4df;
+      color: #9a6700;
+      border-color: #f2d59c;
+    }
+
+    .flash.info {
+      background: #eef2ff;
+      color: #3730a3;
+      border-color: #c7d2fe;
+    }
+
+    .flash-close {
+      position: absolute;
+      top: 50%;
+      right: 12px;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: inherit;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .app-splash-logo img {
+      height: 80px !important;
+      width: auto !important;
+      margin: 0 auto;
+      object-fit: contain;
+      background: transparent !important;
+      box-shadow: none !important;
+      border-radius: 0 !important;
+    }
+
+    @media (max-width: 1024px) {
+      .topbar {
+        padding: 12px 18px;
+      }
+
+      .page-content {
+        padding: 0 14px 22px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .topbar {
+        padding: 12px 14px;
+      }
+
+      .topbar-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .brand {
+        width: 100%;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .main-logo {
+        height: 44px !important;
+      }
+
+      .topbar-right {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 10px 14px;
+      }
+
+      .page-content,
+      .flash-stack {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      .brand-text h2 {
+        font-size: 16px;
+      }
+
+      .brand-text p {
+        font-size: 11px;
+      }
+
+      .topbar-right a {
+        font-size: 13px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .topbar {
+        padding: 10px 12px;
+      }
+
+      .main-logo {
+        height: 40px !important;
+      }
+
+      .brand {
+        gap: 10px;
+      }
+
+      .brand-text h2 {
+        font-size: 15px;
+      }
+
+      .brand-text p {
+        font-size: 10px;
+      }
+
+      .topbar-right {
+        gap: 8px 12px;
+      }
+
+      .topbar-right a {
+        font-size: 12px;
+      }
+
+      .flash {
+        font-size: 13px;
+        padding: 10px 38px 10px 12px;
+      }
+
+      .page-content,
+      .flash-stack {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+    }
+  </style>
+
+  {% block extra_css %}{% endblock %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app-ui.css', v=1) }}">
+</head>
+
+<body>
+
+<div class="app-splash" aria-hidden="true">
+  <div class="app-splash-card">
+    <div class="app-splash-logo">
+      <img src="{{ url_for('static', filename='icons/Saveera-Hospital_logo-removebg-preview.png') }}"
+           alt="Saveera Hospital">
+    </div>
+    <div class="app-splash-title">KIMS Saveera</div>
+    <div class="app-splash-sub">Doctor Referral App</div>
+    <div class="app-loader"></div>
+  </div>
+</div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+
+    <div class="brand">
+      <img src="{{ url_for('static', filename='icons/Saveera-Hospital_logo-removebg-preview.png') }}"
+           alt="Saveera Hospital"
+           class="main-logo">
+
+      <div class="brand-text">
+        <h2></h2>
+        <p></p>
+      </div>
+    </div>
+
+    <div class="topbar-right">
+      {% if session.get('user_id') %}
+
+        <a href="{{ url_for('dashboard.home') }}">Dashboard</a>
+
+        {% if session.get('role') == 'admin' %}
+          <a href="{{ url_for('clinic.create_clinic') }}">Create QR</a>
+          <a href="{{ url_for('admin.doctor_approvals') }}">Doctor Approvals</a>
+          <a href="{{ url_for('admin.sql_console') }}">SQL Console</a>
+        {% endif %}
+
+        {% if session.get('role') == 'doctor' %}
+          <a href="{{ url_for('dashboard.home') }}">My Referrals</a>
+        {% endif %}
+
+        {% if session.get('role') == 'hospital' %}
+          <a href="{{ url_for('dashboard.home') }}">Hospital Panel</a>
+        {% endif %}
+
+        <a href="{{ url_for('auth.logout') }}">Logout</a>
+
+      {% else %}
+        <a href="{{ url_for('auth.login') }}">Login</a>
+        <a href="{{ url_for('auth.doctor_signup_page') }}">Signup</a>
+        <a href="{{ url_for('auth.learn_more') }}">Learn More</a>
+      {% endif %}
+    </div>
+
+  </div>
+</header>
+
+<div id="flash-container" class="flash-stack" aria-live="polite">
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash {{ category }}" role="alert">
+        <span class="flash-text">{{ message }}</span>
+        <button type="button" class="flash-close" aria-label="Close message" onclick="closeFlash(this)">×</button>
+      </div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+</div>
+
+<div class="page-content">
+  {% block content %}{% endblock %}
+</div>
+
+{% if session.get('user_id') %}
+<nav class="app-bottom-nav" aria-label="Mobile app navigation">
+  <a href="{{ url_for('dashboard.home') }}"><b>⌂</b><span>Home</span></a>
+
+  {% if session.get('role') == 'admin' %}
+    <a href="{{ url_for('clinic.create_clinic') }}"><b>▣</b><span>QR</span></a>
+    <a href="{{ url_for('admin.doctor_approvals') }}"><b>✓</b><span>Doctors</span></a>
+    <a href="{{ url_for('auth.logout') }}"><b>⏻</b><span>Logout</span></a>
+
+  {% elif session.get('role') == 'hospital' %}
+    <a href="{{ url_for('dashboard.home') }}"><b>☤</b><span>Hospital</span></a>
+    <a href="{{ url_for('dashboard.home') }}"><b>◉</b><span>Leads</span></a>
+    <a href="{{ url_for('auth.logout') }}"><b>⏻</b><span>Logout</span></a>
+
+  {% elif session.get('role') == 'doctor' %}
+    <a href="{{ url_for('dashboard.home') }}"><b>👥</b><span>Referrals</span></a>
+    <a href="{{ url_for('mobile.dashboard') }}"><b>▤</b><span>App</span></a>
+    <a href="{{ url_for('auth.logout') }}"><b>⏻</b><span>Logout</span></a>
+
+  {% else %}
+    <a href="{{ url_for('auth.logout') }}"><b>⏻</b><span>Logout</span></a>
+  {% endif %}
+</nav>
+{% endif %}
+
+{% block extra_js %}{% endblock %}
+
+<script>
+  function closeFlash(button) {
+    const flash = button ? button.closest('.flash') : null;
+    if (!flash) return;
+    flash.classList.add('flash-hide');
+    setTimeout(function () {
+      flash.remove();
+    }, 450);
+  }
+
+  window.addEventListener('DOMContentLoaded', function () {
+    const flashes = document.querySelectorAll('.flash');
+    flashes.forEach(function (flash) {
+      setTimeout(function () {
+        if (!flash.isConnected) return;
+        flash.classList.add('flash-hide');
+        setTimeout(function () {
+          if (flash.isConnected) flash.remove();
+        }, 450);
+      }, 4000);
+    });
+  });
+</script>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("/service-worker.js", { scope: "/" })
+        .then(function () {
+          console.log("HealthQR PWA service worker registered");
+        })
+        .catch(function (error) {
+          console.log("HealthQR PWA service worker registration failed:", error);
+        });
+    });
+  }
+</script>
+
+<script src="{{ url_for('static', filename='js/app-ui.js', v=1) }}"></script>
+</body>
+</html>

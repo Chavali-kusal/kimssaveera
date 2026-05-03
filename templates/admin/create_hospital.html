@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Create Hospital{% endblock %}
+
+{% block extra_css %}
+<style>
+  .page-wrap{max-width:860px;margin:0 auto;padding:24px 16px;}
+  .card{background:#fff;border:1px solid #d9dee7;border-radius:14px;padding:22px;box-shadow:0 10px 24px rgba(0,0,0,.04);}
+  .head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;}
+  .head h1{margin:0;font-size:26px;color:#1f2937;}
+  .badge{background:#fff4df;color:#9a6700;padding:7px 12px;border-radius:999px;font-size:12px;font-weight:700;}
+  .sub{color:#6b7280;font-size:14px;margin:0 0 18px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .full{grid-column:1/-1;}
+  label{display:block;font-size:14px;font-weight:600;color:#374151;margin-bottom:6px;}
+  input{width:100%;padding:11px 12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;}
+  .hint{font-size:12px;color:#6b7280;margin-top:6px;line-height:1.5;}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px;}
+  .btn-main,.btn-light{padding:11px 16px;border-radius:8px;text-decoration:none;border:1px solid #d1d5db;font-weight:600;cursor:pointer;}
+  .btn-main{background:#f47c33;color:#fff;border-color:#f47c33;}
+  .btn-light{background:#fff;color:#374151;}
+  @media (max-width: 720px){.page-wrap{padding:16px 12px 28px}.grid{grid-template-columns:1fr}.head h1{font-size:22px}.actions>*{width:100%;text-align:center}}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-wrap">
+  <div class="card">
+    <div class="head">
+      <h1>Create Hospital Login</h1>
+      <span class="badge">Admin Only</span>
+    </div>
+    <p class="sub">Create hospital access from admin only. No sample hospital users are included in this publish build.</p>
+
+    <form method="post">
+      <div class="grid">
+        <div>
+          <label for="hospital_name">Hospital Name *</label>
+          <input id="hospital_name" name="hospital_name" required>
+        </div>
+        <div>
+          <label for="login_id">Login ID</label>
+          <input id="login_id" name="login_id" placeholder="Optional. Defaults to hospital name">
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email">
+        </div>
+        <div>
+          <label for="city_name">City</label>
+          <input id="city_name" name="city_name">
+        </div>
+        <div>
+          <label for="password">Password *</label>
+          <input id="password" name="password" type="password" required>
+          <div class="hint">Hospital can use password login after admin creates the account.</div>
+        </div>
+        <div>
+          <label for="secret_code">Secret Key *</label>
+          <input id="secret_code" name="secret_code" required>
+          <div class="hint">Login supports password or secret key using the switch button.</div>
+        </div>
+        <div class="full actions">
+          <button class="btn-main" type="submit">Create Hospital</button>
+          <a class="btn-light" href="{{ url_for('dashboard.home') }}">Back to Dashboard</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

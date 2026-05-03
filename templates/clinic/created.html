@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% block title %}QR Ready{% endblock %}
+
+{% block extra_css %}
+<style>
+  .qr-page {
+    padding: 40px 16px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .qr-card {
+    width: 100%;
+    max-width: 520px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    padding: 28px 24px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: #e8f7ed;
+    color: #1f7a3d;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .qr-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 8px;
+  }
+
+  .qr-sub {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 20px;
+    line-height: 1.7;
+  }
+
+  .qr-preview {
+    width: 220px;
+    height: 220px;
+    object-fit: contain;
+    margin: 10px auto 20px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    padding: 10px;
+    background: #fafafa;
+  }
+
+  .info-box {
+    background: #f9fafb;
+    border: 1px dashed #d1d5db;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    color: #374151;
+    word-break: break-all;
+    margin-top: 12px;
+    line-height: 1.6;
+  }
+
+  .helper-note {
+    margin-top: 14px;
+    font-size: 13px;
+    color: #6b7280;
+    line-height: 1.6;
+  }
+
+  .action-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+
+  .btn {
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-primary {
+    background: #f47c33;
+    color: #fff;
+  }
+
+  .btn-primary:hover {
+    background: #ea6e22;
+  }
+
+  .btn-outline {
+    background: #fff;
+    border-color: #d1d5db;
+    color: #374151;
+  }
+
+  .btn-outline:hover {
+    background: #f3f4f6;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="qr-page">
+
+  <div class="qr-card">
+
+    <span class="status-badge">QR Generated Successfully</span>
+
+    <div class="qr-title">{{ clinic['clinic_name'] }}</div>
+
+    <div class="qr-sub">
+      Doctor: <b>{{ clinic['doctor_name'] }}</b><br>
+      Hospital: <b>{{ clinic['hospital_name'] }}</b>
+      {% if clinic['area'] %}
+      <br>City: <b>{{ clinic['area'] }}</b>
+      {% endif %}
+    </div>
+
+    <img
+      class="qr-preview"
+      src="{{ url_for('qr_view', filename=qr_file) }}"
+      alt="QR Code"
+    >
+
+    <div class="action-row">
+      <a
+        class="btn btn-primary"
+        target="_blank"
+        href="{{ url_for('qr_view', filename=qr_file) }}"
+      >
+        Open QR
+      </a>
+
+      <a
+        class="btn btn-outline"
+        href="{{ url_for('qr_view', filename=qr_file) }}?download=1"
+      >
+        Download
+      </a>
+
+      <a
+        class="btn btn-outline"
+        target="_blank"
+        href="{{ lead_url }}"
+      >
+        Open Form
+      </a>
+    </div>
+
+    <div class="info-box">
+      {{ lead_url }}
+    </div>
+
+    <div class="helper-note">
+      Use this QR in clinic display, print, or share. If this doctor already had a QR for the selected hospital,
+      the same QR page may be opened again instead of creating a duplicate.
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

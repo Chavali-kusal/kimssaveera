@@ -1,0 +1,24 @@
+HealthQR Flask Mobile-App UI Upgrade
+
+What changed:
+1. Backend routes, database logic, login/signup flow, and role logic are unchanged.
+2. Added static/css/app-ui.css as the presentation upgrade layer.
+3. Added static/js/app-ui.js for splash screen, page transition feel, button tap effect, active bottom nav, and submit loading text.
+4. Updated templates/base.html to load the new UI layer, splash screen, and mobile bottom navigation.
+5. Updated standalone login/mobile templates to use the same animation layer.
+6. Updated PWA theme colors to professional blue/teal.
+
+How to run:
+1. Create/activate virtual environment.
+2. pip install -r requirements.txt
+3. python app.py
+4. Open http://127.0.0.1:5000/login
+
+Design direction:
+- Mobile app style, not React conversion.
+- Professional light theme with blue/teal healthcare colors.
+- Clean cards, soft shadows, bottom navigation, responsive font sizes.
+- Desktop remains dashboard-friendly; mobile becomes app-like.
+
+Important:
+This ZIP upgrades only UI/presentation. It does not rewrite your Flask business logic.

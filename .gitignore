@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.env
+database/*.db
+private_uploads/
+qr_codes/*.png
+instance/
+*.log

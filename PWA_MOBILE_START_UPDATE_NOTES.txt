@@ -1,0 +1,31 @@
+KIMS Saveera PWA mobile start update
+
+Updated for PWA installation so the installed app starts from:
+https://kimssaveera.onrender.com/m/login
+
+Changed files:
+1. static/manifest.json
+   - name: KIMS Saveera Doctor App
+   - start_url: /m/login?source=pwa
+   - scope: /m/
+   - display: standalone
+   - theme_color: #111827
+
+2. static/service-worker.js
+   - cache name updated to kimssaveera-pwa-v3
+   - app shell now includes /m/login and mobile app assets
+   - offline fallback now prefers /m/login before offline.html
+
+3. static/offline.html
+   - retry button now opens /m/login
+   - text updated for KIMS Saveera mobile app
+
+4. templates/mobile/*.html
+   - added/confirmed PWA manifest link
+   - added Android/iPhone standalone app meta tags
+   - added apple touch icon
+
+Important behavior:
+- Normal web login remains: /login
+- Installed PWA mobile app starts from: /m/login
+- iPhone users should install from Safari using Add to Home Screen.
