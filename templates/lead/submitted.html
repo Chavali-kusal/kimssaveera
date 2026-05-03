@@ -36,6 +36,31 @@
     color: #991b1b;
   }
 
+  .lead-flash {
+    margin: 0 auto 18px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    transition: opacity 0.4s ease;
+  }
+
+  .lead-flash.success {
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+  }
+
+  .lead-flash.error {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+  }
+
+  .lead-flash.hide {
+    opacity: 0;
+  }
+
   .submit-title {
     margin: 0 0 10px;
     font-size: 28px;
@@ -152,6 +177,10 @@
     {% if ok and lead %}
       <span class="status-badge">Submitted Successfully</span>
 
+      <div class="lead-flash success" id="leadFlash">
+        Referral submitted successfully.
+      </div>
+
       <h1 class="submit-title">Thank You</h1>
 
       <p class="submit-sub">
@@ -169,7 +198,7 @@
       </div>
 
       <div class="small-note">
-        This referral page is now closed. You can close this browser tab/window.
+        This referral page will close automatically after 4 seconds.
       </div>
 
       <div class="action-row">
@@ -178,6 +207,10 @@
 
     {% else %}
       <span class="status-badge error">Submission Not Found</span>
+
+      <div class="lead-flash error" id="leadFlash">
+        Submission failed. Please try again.
+      </div>
 
       <h1 class="submit-title">Something went wrong</h1>
 
@@ -230,8 +263,16 @@
     });
   }
 
+  const leadFlash = document.getElementById("leadFlash");
+
+  if (leadFlash) {
+    setTimeout(function () {
+      leadFlash.classList.add("hide");
+    }, 3500);
+  }
+
   {% if ok and lead %}
-    setTimeout(tryClosePage, 1500);
+    setTimeout(tryClosePage, 4000);
   {% endif %}
 </script>
 {% endblock %}
