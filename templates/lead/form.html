@@ -3,14 +3,8 @@
 
 {% block extra_css %}
 <style>
-  .form-page {
-    padding: 24px 16px 36px;
-  }
-
-  .form-wrap {
-    max-width: 1100px;
-    margin: 0 auto;
-  }
+  .form-page { padding: 24px 16px 36px; }
+  .form-wrap { max-width: 1100px; margin: 0 auto; }
 
   .main-box {
     display: flex;
@@ -26,16 +20,8 @@
     background: #e9e3db;
   }
 
-  .left-box h3 {
-    margin-bottom: 10px;
-    color: #1f2937;
-  }
-
-  .left-box p {
-    color: #4b5563;
-    line-height: 1.6;
-    margin-bottom: 0;
-  }
+  .left-box h3 { margin-bottom: 10px; color: #1f2937; }
+  .left-box p { color: #4b5563; line-height: 1.6; margin-bottom: 0; }
 
   .right-box {
     width: 64%;
@@ -81,17 +67,8 @@
     padding: 12px;
   }
 
-  .summary-card span {
-    font-size: 12px;
-    color: #6b7280;
-  }
-
-  .summary-card strong {
-    display: block;
-    font-size: 14px;
-    margin-top: 3px;
-    color: #111827;
-  }
+  .summary-card span { font-size: 12px; color: #6b7280; }
+  .summary-card strong { display: block; font-size: 14px; margin-top: 3px; color: #111827; }
 
   .form-grid {
     display: grid;
@@ -99,9 +76,7 @@
     gap: 14px;
   }
 
-  .full-row {
-    grid-column: 1 / -1;
-  }
+  .full-row { grid-column: 1 / -1; }
 
   label {
     display: block;
@@ -110,9 +85,7 @@
     color: #1f2937;
   }
 
-  .required-star {
-    color: #dc2626;
-  }
+  .required-star { color: #dc2626; }
 
   .form-input {
     width: 100%;
@@ -153,9 +126,7 @@
     cursor: pointer;
   }
 
-  .consent-box input[type="checkbox"] {
-    margin-top: 3px;
-  }
+  .consent-box input[type="checkbox"] { margin-top: 3px; }
 
   .submit-btn {
     width: 100%;
@@ -170,13 +141,8 @@
     transition: background 0.2s ease, transform 0.1s ease;
   }
 
-  .submit-btn:hover {
-    background: #ea6e22;
-  }
-
-  .submit-btn:active {
-    transform: scale(0.995);
-  }
+  .submit-btn:hover { background: #ea6e22; }
+  .submit-btn:active { transform: scale(0.995); }
 
   .submit-btn:disabled {
     background: #f4a87a;
@@ -194,9 +160,7 @@
     line-height: 1.6;
   }
 
-  .flash-wrap {
-    margin-bottom: 18px;
-  }
+  .flash-wrap { margin-bottom: 18px; }
 
   .flash-msg {
     padding: 12px 14px;
@@ -206,7 +170,8 @@
     border: 1px solid transparent;
   }
 
-  .flash-msg.error {
+  .flash-msg.error,
+  .flash-msg.danger {
     background: #fef2f2;
     color: #991b1b;
     border-color: #fecaca;
@@ -248,30 +213,14 @@
   }
 
   @media (max-width: 900px) {
-    .main-box {
-      flex-direction: column;
-    }
-
-    .left-box,
-    .right-box {
-      width: 100%;
-    }
+    .main-box { flex-direction: column; }
+    .left-box, .right-box { width: 100%; }
   }
 
   @media (max-width: 600px) {
-    .form-grid,
-    .summary-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .right-box,
-    .left-box {
-      padding: 22px 18px;
-    }
-
-    .right-box h1 {
-      font-size: 22px;
-    }
+    .form-grid, .summary-grid { grid-template-columns: 1fr; }
+    .right-box, .left-box { padding: 22px 18px; }
+    .right-box h1 { font-size: 22px; }
   }
 </style>
 {% endblock %}
@@ -299,7 +248,7 @@
           {% if messages %}
             <div class="flash-wrap">
               {% for category, message in messages %}
-                <div class="flash-msg {{ category }}">{{ message }}</div>
+                <div class="flash-msg {{ category|lower }}">{{ message }}</div>
               {% endfor %}
             </div>
           {% endif %}
@@ -329,6 +278,7 @@
           <input type="hidden" name="doctor_user_id" value="{{ row['doctor_user_id'] }}">
           <input type="hidden" name="hospital_user_id" value="{{ row['hospital_user_id'] }}">
           <input type="hidden" name="token" value="{{ row['token'] }}">
+
           <input type="hidden" name="submit_latitude" id="submit_latitude">
           <input type="hidden" name="submit_longitude" id="submit_longitude">
           <input type="hidden" name="submit_accuracy" id="submit_accuracy">
@@ -394,7 +344,8 @@
 
             <div class="full-row location-box">
               <strong>Location capture</strong><br>
-              Approximate location will be requested only when you press submit. This helps verify referral location and hospital visit tracking.
+              Approximate location will be requested only when you press submit.
+              This helps verify referral location and hospital visit tracking.
               <div class="location-status" id="locationStatus">Location will be captured at submit time.</div>
             </div>
 
@@ -452,7 +403,9 @@
 
   function setField(id, value) {
     const el = document.getElementById(id);
-    if (el) el.value = value || "";
+    if (el) {
+      el.value = value === null || value === undefined ? "" : value;
+    }
   }
 
   function setLocationFields(status, position) {
@@ -463,6 +416,10 @@
       setField("submit_latitude", position.coords.latitude);
       setField("submit_longitude", position.coords.longitude);
       setField("submit_accuracy", position.coords.accuracy || "");
+    } else {
+      setField("submit_latitude", "");
+      setField("submit_longitude", "");
+      setField("submit_accuracy", "");
     }
   }
 
@@ -500,12 +457,26 @@
         setLocationMessage("Location captured. Submitting referral...");
         submitNow();
       },
-      function () {
-        setLocationFields("denied_or_unavailable", null);
-        setLocationMessage("Location permission denied/unavailable. Submitting referral with location status...");
+      function (error) {
+        let status = "denied_or_unavailable";
+
+        if (error && error.code === 1) {
+          status = "permission_denied";
+        } else if (error && error.code === 2) {
+          status = "position_unavailable";
+        } else if (error && error.code === 3) {
+          status = "timeout";
+        }
+
+        setLocationFields(status, null);
+        setLocationMessage("Location not captured (" + status + "). Submitting referral...");
         submitNow();
       },
-      { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 }
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 0
+      }
     );
   });
 })();
